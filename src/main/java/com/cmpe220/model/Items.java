@@ -21,7 +21,7 @@ public class Items {
 	String itemDescription;
 	
 	@Column(name="item_price")
-	float itemPrice;
+	Double itemPrice;
 	
 	@ManyToOne
     @JoinColumn(name="bill_id")
@@ -31,7 +31,7 @@ public class Items {
 		
 	}
 
-	public Items(int itemId, String itemDescription, float itemPrice, Bill billId) {
+	public Items(int itemId, String itemDescription, Double itemPrice, Bill billId) {
 		super();
 		this.id = itemId;
 		this.itemDescription = itemDescription;
@@ -55,11 +55,11 @@ public class Items {
 		this.itemDescription = itemDescription;
 	}
 
-	public float getItemPrice() {
+	public Double getItemPrice() {
 		return itemPrice;
 	}
 
-	public void setItemPrice(float itemPrice) {
+	public void setItemPrice(Double itemPrice) {
 		this.itemPrice = itemPrice;
 	}
 

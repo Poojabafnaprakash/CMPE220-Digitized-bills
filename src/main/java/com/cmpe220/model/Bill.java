@@ -21,10 +21,10 @@ public class Bill {
 	int id;
 	
 	@Column(name="tax")
-	float tax;
+	Double tax;
 	
 	@Column(name="total")
-	float total;
+	Double total;
 	
 	@Column(name="bill_path")
 	String billPath;
@@ -44,7 +44,7 @@ public class Bill {
 	@OneToMany(mappedBy="billId")
 	private Set<Items> items;
 	
-	public Bill(int id, float tax, float total, String billPath, User userId, Set<Items> items) {
+	public Bill(int id, Double tax, Double total, String billPath, User userId, Set<Items> items) {
 		super();
 		this.id = id;
 		this.tax = tax;
@@ -66,19 +66,19 @@ public class Bill {
 		this.id = id;
 	}
 
-	public float getTax() {
+	public Double getTax() {
 		return tax;
 	}
 
-	public void setTax(float tax) {
+	public void setTax(Double tax) {
 		this.tax = tax;
 	}
 
-	public float getTotal() {
+	public Double getTotal() {
 		return total;
 	}
 
-	public void setTotal(float total) {
+	public void setTotal(Double total) {
 		this.total = total;
 	}
 

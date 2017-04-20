@@ -5,7 +5,7 @@ import java.util.List;
 public class Item {
 	String itemCode;
 	String itemDescription;
-	String itemAmt;
+	Double itemAmt;
 	List<SplitFriendsDetails> splitFriendsDetails;
 	
 	public Item() {
@@ -13,7 +13,7 @@ public class Item {
 	}
 	
 	
-	public Item(String itemCode, String itemDescription, String itemAmt,
+	public Item(String itemCode, String itemDescription, Double itemAmt,
 			List<SplitFriendsDetails> splitFriendsDetails) {
 		super();
 		this.itemCode = itemCode;
@@ -35,10 +35,10 @@ public class Item {
 	public void setItemDescription(String itemDescription) {
 		this.itemDescription = itemDescription;
 	}
-	public String getItemAmt() {
+	public Double getItemAmt() {
 		return itemAmt;
 	}
-	public void setItemAmt(String itemAmt) {
+	public void setItemAmt(Double itemAmt) {
 		this.itemAmt = itemAmt;
 	}
 	public List<SplitFriendsDetails> getSplitFriendsDetails() {

@@ -18,11 +18,6 @@ public class GetFriendsService {
 	@Autowired
 	private GetFriendsRepository getFriendsRepository;
 	
-//	private List<Friends> friends = Arrays.asList(
-//			new Friends(1,"pooja","Prakash"),
-//			new Friends(2, "varun", "gore")
-//			);
-	
 	@ResponseBody
 	public List<Friend> getAllFriends(){
 		//getFriendsRepository.save(friends);

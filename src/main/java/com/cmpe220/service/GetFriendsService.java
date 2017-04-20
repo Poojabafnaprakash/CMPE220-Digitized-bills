@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cmpe220.model.Bill;
 import com.cmpe220.model.Friend;
+import com.cmpe220.model.User;
 import com.cmpe220.repository.GetFriendsRepository;
 
 @Service
@@ -26,6 +28,10 @@ public class GetFriendsService {
 		.forEach(friends::add);
 		return friends;
 		
+	}
+	
+	public List<Friend> findFriends(User user) {
+		return getFriendsRepository.findFriends(user);
 	}
 
 }

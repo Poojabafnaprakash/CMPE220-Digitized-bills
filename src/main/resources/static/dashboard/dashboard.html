@@ -1,4 +1,14 @@
 <body>
+<div ng-controller="DashboardCtrl">
+  <h4>Upload on file select</h4>
+  <button type="file" ngf-select="uploadFiles($file, $invalidFiles)"
+          accept="image/*" ngf-max-height="1000" ngf-max-size="1MB">
+      Select File</button>
+  <br><br>
+  File:
+</div>
+
+
       <nav class="navbar navbar-default">
          <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->

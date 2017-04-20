@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.cmpe220.model.Bill;
@@ -37,7 +38,7 @@ import com.cmpe220.service.BillService;
 import com.cmpe220.service.GetFriendsService;
 import com.cmpe220.service.ItemsService;
 
-@Controller
+@RestController
 @SessionAttributes("user")
 public class OcrImageToTextConverterController {
 

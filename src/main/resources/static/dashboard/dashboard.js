@@ -7,7 +7,7 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'ngFileUpload'])
   })
 }])
 
-.controller('DashboardCtrl', ['$scope', 'Upload', '$timeout', function($scope, Upload, $timeout){
+.controller('DashboardCtrl', ['$scope', '$http', 'Upload', '$timeout', function($scope, $http, Upload, $timeout){
 	
 	$scope.uploadFiles = function(file, errFiles) {
         $scope.f = file;
@@ -22,4 +22,15 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'ngFileUpload'])
             });
         }   
     }  
+	
+	$scope.allFriends = [];
+	$http({
+		method: 'GET',
+		url: '/getUserFriends'
+	}).then(function(response){
+		if((response.data).length>0){
+			 $scope.allFriends = response.data;
+        }
+	});
+	
 }]);

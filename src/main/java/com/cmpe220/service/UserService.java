@@ -44,4 +44,8 @@ public class UserService {
 	public void deleteUser(int id){
 		userRepository.delete(id);
 	}
+	
+	public List<User> findUsers(List<Integer> ids){
+		return userRepository.findUsers(ids);
+	}
 }

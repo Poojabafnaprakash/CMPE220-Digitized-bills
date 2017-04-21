@@ -34,9 +34,11 @@ import com.cmpe220.model.User;
 import com.cmpe220.object.Item;
 import com.cmpe220.object.JsonRequestWrapper;
 import com.cmpe220.ocr.OcrImageToTextConverterService;
+import com.cmpe220.repository.UserRepository;
 import com.cmpe220.service.BillService;
 import com.cmpe220.service.GetFriendsService;
 import com.cmpe220.service.ItemsService;
+import com.cmpe220.service.UserService;
 
 @RestController
 @SessionAttributes("user")
@@ -50,14 +52,17 @@ public class OcrImageToTextConverterController {
 
 	@Autowired
 	private ItemsService itemsService;
-	
+
 	@Autowired
 	private GetFriendsService getFriendsService;
+	
+	@Autowired
+	private UserService userService;
 
 	public Bill bill;
 
 	public List<Bill> bills;
-	public List<Friend> friend ;
+	public List<Friend> friendsList;
 
 	public Items items;
 	public Set<Items> itemsList;
@@ -79,21 +84,26 @@ public class OcrImageToTextConverterController {
 		return "bill";
 	}
 
-	
 	public String redirectToDashboard(User user) {
-		System.out.println("User id is "+user.getUserId());
-		friend = new ArrayList<>();
+		System.out.println("User id is " + user.getUserId());
 		this.user = new User();
 		this.user = user;
-		
+
 		return "redirect:/#!/dashboard";
 	}
-	
+
 	@RequestMapping("/getUserFriends")
-	public List<Friend> getFriends(){
-		friend = new ArrayList<>();
-		friend = getFriendsService.findFriends(user);
-		return friend;
+	public List<User> getFriends() {
+		friendsList = new ArrayList<>();
+		friendsList = getFriendsService.findFriends(user);
+		List<Integer> friendIds = new ArrayList<>();
+		for(Friend i:friendsList ){
+			friendIds.add(i.getFriendId().getUserId());
+		}
+		List<User> names = new ArrayList<>();
+		names = userService.findUsers(friendIds);
+		System.out.println("User friends lsit "+friendsList.size());
+		return names;
 	}
 
 	@PostMapping("/getEditableBills")

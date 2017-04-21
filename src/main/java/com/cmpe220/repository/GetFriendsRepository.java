@@ -15,6 +15,6 @@ import com.cmpe220.model.User;
 // features Hibernate
 
 public interface GetFriendsRepository extends CrudRepository<Friend, Integer> {
-	 @Query("SELECT f FROM Friend f WHERE f.userId = :userId")
+	 @Query("SELECT f FROM Friend f where f.userId=:userId")
 	  public List<Friend> findFriends(@Param("userId") User userId);
 }

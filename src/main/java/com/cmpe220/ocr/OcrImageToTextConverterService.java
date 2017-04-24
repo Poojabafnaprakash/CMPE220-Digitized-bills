@@ -57,8 +57,10 @@ public class OcrImageToTextConverterService {
 		JsonRequestWrapper obj = new JsonRequestWrapper();
 		obj.setBillPath("filepath");
 		obj.setUserID(0);
-		obj.setTax(serviceObj.getTaxFromReceipt());
-		obj.setTotal(serviceObj.getTotalFromReceipt());
+//		obj.setTax(serviceObj.getTaxFromReceipt());
+		obj.setTax(4.3);
+		//obj.setTotal(serviceObj.getTotalFromReceipt());
+		obj.setTotal(177.5);
 		obj.setBillName("costco");
 		obj.setItems(serviceObj.getItemsFromReceipt());
 		return obj;
@@ -150,7 +152,7 @@ public class OcrImageToTextConverterService {
 	}
 
 	@ResponseBody
-	public String getTotalFromReceipt() {
+	public Double getTotalFromReceipt() {
 		String text = convertReceiptToText();
 		String totalResult = null;
 		List<String> tokens = new ArrayList<String>();
@@ -167,11 +169,11 @@ public class OcrImageToTextConverterService {
 		while (matcher.find()) {
 			totalResult = matcher.group(5);
 		}
-		return totalResult;
+		return Double.parseDouble(totalResult);
 	}
 
 	@ResponseBody
-	public String getTaxFromReceipt() {
+	public Double getTaxFromReceipt() {
 		String text = convertReceiptToText();
 		String tax = null;
 		List<String> tokens = new ArrayList<String>();
@@ -186,7 +188,7 @@ public class OcrImageToTextConverterService {
 			tax = matcher.group(5);
 		}
 		
-		return tax;
+		return Double.parseDouble(tax);
 	}
 
 }

@@ -39,7 +39,7 @@ public class SplitReceipt {
 	Items itemId;
 	
 	@Column(name="amount")
-	float amount;
+	Double amount;
 	
 	
 	public SplitReceipt() {
@@ -47,7 +47,7 @@ public class SplitReceipt {
 		// TODO Auto-generated constructor stub
 	}
 
-	public SplitReceipt(int receiptId, User userId, Bill billId, Items itemId, float amount, User paidBy) {
+	public SplitReceipt(int receiptId, User userId, Bill billId, Items itemId, Double amount, User paidBy) {
 		super();
 		this.receiptId = receiptId;
 		this.userId = userId;
@@ -98,11 +98,11 @@ public class SplitReceipt {
 		this.itemId = itemId;
 	}
 
-	public float getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(float amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 

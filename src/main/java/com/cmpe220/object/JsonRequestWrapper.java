@@ -8,8 +8,8 @@ public class JsonRequestWrapper {
 
 	String billPath;
 	int userID;
-	String tax;
-	String total;
+	Double tax;
+	Double total;
 	String billName;
 	List<Item> items;
 	User paidBy;
@@ -32,19 +32,19 @@ public class JsonRequestWrapper {
 		this.userID = userID;
 	}
 
-	public String getTax() {
+	public Double getTax() {
 		return tax;
 	}
 
-	public void setTax(String tax) {
+	public void setTax(Double tax) {
 		this.tax = tax;
 	}
 
-	public String getTotal() {
+	public Double getTotal() {
 		return total;
 	}
 
-	public void setTotal(String total) {
+	public void setTotal(Double total) {
 		this.total = total;
 	}
 

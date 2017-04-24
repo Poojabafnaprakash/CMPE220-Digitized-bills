@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -73,7 +75,7 @@ public class OcrImageToTextConverterController {
 			@RequestParam(value = "filePath", required = true, defaultValue = "None") String filePath,
 			Model model) {
 		model.addAttribute("name", filePath);
-		obj.setTotal("73.33");
+		//obj.setTotal("73.33");
 		model.addAttribute("object", obj);
 		return "bill";
 	}
@@ -88,20 +90,24 @@ public class OcrImageToTextConverterController {
 	@RequestMapping("/receiptInfo")
 	public JsonRequestWrapper getReceiptInfo() {
 		obj = getTextFromReceiptService.getReceiptDetails();
+		obj.setUserID(user.getUserId());
 		return obj;
 
 	}
 	
-	@PostMapping("/saveBillDeatils")
-	public String saveBill() {
+	@PostMapping("/saveBillDetails")
+	public JsonRequestWrapper saveBill(@RequestBody JsonRequestWrapper obj) {
+		
 		bill = new Bill();
 		items = new Items();
 		itemsList = new ArrayList<>();
-		bill.setBillPath("C:\\Users\\vsaik\\Documents\\GitHub\\CMPE220-Digitized-bills\\src\\main\\resources\\receiptImage\\bill2.png");
-		bill.setTotal(Double.parseDouble(obj.getTotal()));
-		bill.setTax(Double.parseDouble(obj.getTax()));
+		//bill.setBillPath("C:\\Users\\vsaik\\Documents\\GitHub\\CMPE220-Digitized-bills\\src\\main\\resources\\receiptImage\\bill2.png");
+		bill.setBillPath("/Users/poojaprakashchand/Documents/Eclipse/CMPE220-Digitized-bills/src/main/resources/receiptImage/bill2.png");
+		bill.setTotal(obj.getTotal());
+		bill.setTax(obj.getTax());
 		bill.setUserId(user);
-
+		bill.setTotOrItem(obj.getFlag());
+		bill = billservice.addBill(bill);
 		for (Item i : obj.getItems()) {
 			items = new Items();
 			items.setBillId(bill);
@@ -110,26 +116,12 @@ public class OcrImageToTextConverterController {
 			items = itemsService.addItems(items);
 			itemsList.add(items);
 		}
-		bill.setItems(Sets.newHashSet(itemsList));
-		bill = billservice.addBill(bill);
-		return null;
-	}
-	
-	@PostMapping("/getItemDetails")
-	public String getTotorItem(@RequestParam("split") String splitI,
-			@ModelAttribute JsonRequestWrapper object, Model model) {
-
-		if (splitI.equals("Total")) {
-			object.setItems(null);
-			object.setFlag("T");
-			bill.setTotOrItem("T");
-		} else {
-			object.setFlag("I");
-			bill.setTotOrItem("I");
+		if(obj.getFlag().equals("T")){
+			obj.setItems(null);
 		}
-		bill = billservice.addBill(bill);//check if it is updating
-		model.addAttribute("object", object);
-		return "split";
+		
+		this.obj = obj;
+		return obj;
 	}
 
 	@RequestMapping("/getUserFriends")
@@ -146,13 +138,12 @@ public class OcrImageToTextConverterController {
 	}
 	
 	@PostMapping("/addFriends")
-	public String addFriends(@ModelAttribute JsonRequestWrapper object,
-			Model model) {
+	public String addFriends(@RequestBody JsonRequestWrapper object) {
 		int splitBy = 0;
 		if (object.getFlag().equals("T")) {
 			splitBy = object.getSplitIds().size();
 			int index = splitBy - 1;
-			float amount = (float) (Double.parseDouble(object.getTotal()) / splitBy);
+			Double amount = (object.getTotal() / splitBy);
 			while (index >= 0) {
 				splitReceipt = new SplitReceipt();
 				splitReceipt.setAmount(amount);
@@ -166,9 +157,8 @@ public class OcrImageToTextConverterController {
 		} else {
 			int index = object.getItems().size() - 1;
 			while (index >= 0) {
-				int splitIndex = object.getItems().get(index).getSplitIds()
-						.size() - 1;
-				float amount = (float) (object.getItems().get(0).getItemAmt() / (splitIndex + 1));
+				int splitIndex = object.getItems().get(index).getSplitIds().size() - 1;
+				Double amount = (object.getItems().get(index).getItemAmt() / (splitIndex + 1));
 				while (splitIndex >= 0) {
 					splitReceipt = new SplitReceipt();
 					splitReceipt.setAmount(amount);
@@ -183,9 +173,8 @@ public class OcrImageToTextConverterController {
 				index--;
 			}
 		}
-
-		model.addAttribute("object", object);
-		return "split";
+		this.obj = object;
+		return "redirect:/#!/dashboard";
 	}
 
 	@PostMapping("/getEditableBills")
@@ -203,15 +192,15 @@ public class OcrImageToTextConverterController {
 	}
 
 	@RequestMapping("/getTotalFromReceipt")
-	public String getTotalFromReceipt() {
-		String total = null;
+	public Double getTotalFromReceipt() {
+		Double total = null;
 		total = getTextFromReceiptService.getTotalFromReceipt();
 		return total;
 	}
 
 	@RequestMapping("/getTaxFromReceipt")
-	public String getTaxFromReceipt() {
-		String total = null;
+	public Double getTaxFromReceipt() {
+		Double total = null;
 		total = getTextFromReceiptService.getTaxFromReceipt();
 		return total;
 	}

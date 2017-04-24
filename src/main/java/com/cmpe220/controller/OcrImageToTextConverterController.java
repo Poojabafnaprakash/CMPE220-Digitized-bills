@@ -77,7 +77,7 @@ public class OcrImageToTextConverterController {
 			@RequestParam(value = "filePath", required = true, defaultValue = "None") String filePath,
 			Model model) {
 		model.addAttribute("name", filePath);
-		obj = getTextFromReceiptService.getReceiptDetails(filePath);
+		//obj = getTextFromReceiptService.getReceiptDetails(filePath);
 		System.out.println("Total is" + obj.getTotal());
 		obj.setTotal("73.33");
 		model.addAttribute("object", obj);
@@ -120,7 +120,7 @@ public class OcrImageToTextConverterController {
 			@ModelAttribute JsonRequestWrapper object, Model model) {
 		bill = new Bill();
 		items = new Items();
-		bill.setBillPath("C://Users//vsaik//Desktop//bill.png");
+		bill.setBillPath("/Users/poojaprakashchand/Documents/Eclipse/CMPE220-Digitized-bills/src/main/resources/receiptImage/bill2.png");
 		bill.setTotal(Double.parseDouble(obj.getTotal()));
 		bill.setTax(Double.parseDouble(obj.getTax()));
 		bill.setUserId(user);
@@ -148,6 +148,14 @@ public class OcrImageToTextConverterController {
 		object.setTotal("200");
 		model.addAttribute("object", object);
 		return "split";
+	}
+	
+	@RequestMapping("/receiptInfo")
+	public JsonRequestWrapper getReceiptInfo() {
+		JsonRequestWrapper obj = new JsonRequestWrapper();
+		obj = getTextFromReceiptService.getReceiptDetails();
+		return obj;
+		
 	}
 
 	@RequestMapping("/getItemsFromReceipt")

@@ -22,25 +22,29 @@ import net.sourceforge.tess4j.TesseractException;
 @Service
 public class OcrImageToTextConverterService {
 
-	private final static String DEFAULT_TESSDATA_PATH = "C://Users//vsaik//Desktop//Tesseract-OCR";
+	//private final static String DEFAULT_TESSDATA_PATH = "C://Users//vsaik//Desktop//Tesseract-OCR";
+	private final static String DEFAULT_TESSDATA_PATH = "/usr/local/share";
 	private final static String DEFAULT_PAGE_SEG_MODE = "3";
 	private final static String DEFAULT_LANG = "eng";
 
 	public String convertReceiptToText() {
 		String textFromReceipt = null;
-		File imageFile = new File("C://Users//vsaik//Desktop//bill.png");
+		//File imageFile = new File("C://Users//vsaik//Desktop//bill.png");
+		//File imageFile = new File("./src/main/resources/receiptImage/bill1.png");
+		File imageFile = new File("./src/main/resources/receiptImage/bill2.png");
 		Tesseract instance = new Tesseract();
 		instance.setLanguage(DEFAULT_LANG);
 		instance.setDatapath(DEFAULT_TESSDATA_PATH);
 		instance.setPageSegMode(Integer.parseInt(DEFAULT_PAGE_SEG_MODE));
 		try {
 			textFromReceipt = instance.doOCR(imageFile);
-			textFromReceipt = "VDMEX 4PL‘S LEISURE SET 39.99"
-					+ System.lineSeparator() + "HERD SUPER EUNP UVER GRIP 4.99"
-					+ System.lineSeparator() + "HERO CLUB TR SHUTILEEHCK 21.99"
-					+ System.lineSeparator() + "SubTotal 66.97"
-					+ System.lineSeparator() + "Sales Tax  35"
-					+ System.lineSeparator() + "Total 73.33";
+//			textFromReceipt = "VDMEX 4PL‘S LEISURE SET 39.99"
+//					+ System.lineSeparator() + "HERD SUPER EUNP UVER GRIP 4.99"
+//					+ System.lineSeparator() + "HERO CLUB TR SHUTILEEHCK 21.99"
+//					+ System.lineSeparator() + "SubTotal 66.97"
+//					+ System.lineSeparator() + "Sales Tax  35"
+//					+ System.lineSeparator() + "Total 73.33";
+			//System.out.println(textFromReceipt);
 			} catch (TesseractException e) {
 			System.err.println(e.getMessage());
 		}
@@ -48,10 +52,10 @@ public class OcrImageToTextConverterService {
 	}
 
 	@ResponseBody
-	public JsonRequestWrapper getReceiptDetails(String filepath) {
+	public JsonRequestWrapper getReceiptDetails() {
 		OcrImageToTextConverterService serviceObj = new OcrImageToTextConverterService();
 		JsonRequestWrapper obj = new JsonRequestWrapper();
-		obj.setBillPath(filepath);
+		obj.setBillPath("filepath");
 		obj.setUserID(0);
 		obj.setTax(serviceObj.getTaxFromReceipt());
 		obj.setTotal(serviceObj.getTotalFromReceipt());
@@ -136,7 +140,7 @@ public class OcrImageToTextConverterService {
 		String rate = string.substring(0, i);
 		if (rate.contains("total") || rate.contains("Total")
 				|| rate.contains("TOTAL") || rate.contains("tax")
-				|| rate.contains("Tax")) {
+				|| rate.contains("Tax") || rate.contains("Due")) {
 			rates.put("N/A", Double.parseDouble(last));
 		} else {
 			rates.put(rate, Double.parseDouble(last));
@@ -151,23 +155,19 @@ public class OcrImageToTextConverterService {
 		String totalResult = null;
 		List<String> tokens = new ArrayList<String>();
 		tokens.add("Total Due");
-		tokens.add("ATC");
-		// ((SEQ|Card)(?=(:[\s]*[0-9])))+(:[\s]*[0-9]+)
-
-		// ((INVOICE|ATC)(?=(:*[\s]*[$]*[0-9])))+(:*[\s]*[$]*[0-9]+)
-		// String patternString = "\\b(" + StringUtils.join(tokens, "|") +
-		// ")\\b";
+		tokens.add("Due");
+		
+		//((Total Due | Due)(?=(:*[\s]*[$]*[0-9]+.[0-9]*)))+(:*[\s]*[$]*([0-9]+[\s]*.[\s]*[0-9]*))
 		String patternString = "(("
 				+ StringUtils.join(tokens, "|")
-				+ ")(?=(:*[\\s]*[$]*[0-9]+.[0-9]*)))+(:*[\\s]*[$]*([0-9]+.[0-9]*))";
-		// String patternString = "((" + tokens + "))";
+				+ ")(?=(:*[\\s]*[$]*[0-9]+.[0-9]*)))+(:*[\\s]*[$]*([0-9]+[\\s]*.[\\s]*[0-9]*))";
+		
 		Pattern pattern = Pattern.compile(patternString);
 		Matcher matcher = pattern.matcher(text);
 		while (matcher.find()) {
 			totalResult = matcher.group(5);
 		}
 		return totalResult;
-
 	}
 
 	@ResponseBody
@@ -182,11 +182,10 @@ public class OcrImageToTextConverterService {
 				+ ")(?=(:*[\\s]*[$]*[0-9]+.[0-9]*)))+(:*[\\s]*[$]*([0-9]+.[0-9]*))";
 		Pattern pattern = Pattern.compile(patternString);
 		Matcher matcher = pattern.matcher(text);
-
 		while (matcher.find()) {
 			tax = matcher.group(5);
 		}
-		// System.out.println(text);
+		
 		return tax;
 	}
 

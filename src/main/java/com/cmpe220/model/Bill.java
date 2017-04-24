@@ -29,6 +29,9 @@ public class Bill {
 	@Column(name="bill_path")
 	String billPath;
 	
+	@Column(name="flag")
+	String totOrItem;
+	
 	public String getBillPath() {
 		return billPath;
 	}
@@ -44,7 +47,7 @@ public class Bill {
 	@OneToMany(mappedBy="billId")
 	private Set<Items> items;
 	
-	public Bill(int id, Double tax, Double total, String billPath, User userId, Set<Items> items) {
+	public Bill(int id, Double tax, Double total, String billPath, User userId, Set<Items> items, String totOrItem) {
 		super();
 		this.id = id;
 		this.tax = tax;
@@ -52,6 +55,7 @@ public class Bill {
 		this.billPath = billPath;
 		UserId = userId;
 		this.items = items;
+		this.totOrItem = totOrItem;
 	}
 
 	public Bill(){
@@ -96,6 +100,14 @@ public class Bill {
 
 	public void setUserId(User userId) {
 		UserId = userId;
+	}
+
+	public String getTotOrItem() {
+		return totOrItem;
+	}
+
+	public void setTotOrItem(String totOrItem) {
+		this.totOrItem = totOrItem;
 	}
 
 }

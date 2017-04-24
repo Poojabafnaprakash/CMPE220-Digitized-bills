@@ -23,12 +23,16 @@ public class SplitReceipt {
 	User userId;
 	
 	@OneToOne
+	@JoinColumn(name="paid_id")
+	User paidBy;
+	
+	@OneToOne
 	@JoinColumn(name="bill_id")
 	Bill billId;
 	
-	@OneToOne
-	@JoinColumn(name="friend_id")
-	Friend friendId;
+//	@OneToOne
+//	@JoinColumn(name="friend_id")
+//	Friend friendId;
 	
 	@OneToOne
 	@JoinColumn(name="item_id")
@@ -43,12 +47,13 @@ public class SplitReceipt {
 		// TODO Auto-generated constructor stub
 	}
 
-	public SplitReceipt(int receiptId, User userId, Bill billId, Friend friendId, Items itemId, float amount) {
+	public SplitReceipt(int receiptId, User userId, Bill billId, Items itemId, float amount, User paidBy) {
 		super();
 		this.receiptId = receiptId;
 		this.userId = userId;
 		this.billId = billId;
-		this.friendId = friendId;
+		this.paidBy = paidBy;
+		//this.friendId = friendId;
 		this.itemId = itemId;
 		this.amount = amount;
 	}
@@ -77,13 +82,13 @@ public class SplitReceipt {
 		this.billId = billId;
 	}
 
-	public Friend getFriendId() {
-		return friendId;
-	}
-
-	public void setFriendId(Friend friendId) {
-		this.friendId = friendId;
-	}
+//	public Friend getFriendId() {
+//		return friendId;
+//	}
+//
+//	public void setFriendId(Friend friendId) {
+//		this.friendId = friendId;
+//	}
 
 	public Items getItemId() {
 		return itemId;
@@ -99,6 +104,14 @@ public class SplitReceipt {
 
 	public void setAmount(float amount) {
 		this.amount = amount;
+	}
+
+	public User getPaidBy() {
+		return paidBy;
+	}
+
+	public void setPaidBy(User paidBy) {
+		this.paidBy = paidBy;
 	}
 
 	

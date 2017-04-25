@@ -33,4 +33,8 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'ngFileUpload'])
         }
 	});
 	
+	$scope.receiptsView = function(){
+		window.location.assign("/#!receiptsView");
+	}
+	
 }]);

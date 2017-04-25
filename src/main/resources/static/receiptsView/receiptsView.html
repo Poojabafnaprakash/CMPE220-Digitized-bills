@@ -1,1 +1,54 @@
-receiptsView
+<div ng-controller = "ReceiptsViewCtrl">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1 class="page-header">Receipt uploaded</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <!-- /.col-lg-6 -->
+    <div class="col-sm-6 col-sm-offset-3">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Receipt Details
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body" >
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Item Number</th>
+                  <th>Item Name</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="success" ng-model="itemsArray" ng-repeat="x in itemsArray">
+                  <td>{{ $index + 1 }}</td>
+                  <td>{{x.itemDescription}}</td>
+                  <td>${{x.itemAmt}}</td>
+                </tr>
+                <tr class="info" ng-model="itms">
+                  <td>Tax</td>
+                  <td></td>
+                  <td>${{itms.tax}}</td>
+                </tr>
+                <tr class="danger" ng-model="itms">
+                  <td>Total</td>
+                  <td></td>
+                  <td>${{itms.total}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- /.table-responsive -->
+        </div>
+        <!-- /.panel-body -->
+      </div>
+      <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-6 -->
+  </div>
+</div>

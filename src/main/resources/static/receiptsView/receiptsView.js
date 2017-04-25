@@ -7,5 +7,13 @@ angular.module('app.receiptsView', ['ngRoute', 'ngStorage'])
   })
 }])
 .controller('ReceiptsViewCtrl', function($scope, $http,  $sessionStorage){
-	  
+	$scope.itms = {};
+	$scope.itemsArray = [];
+		  $http({
+				method: 'GET',
+				url: '/receiptInfo'
+			}).then(function(response){
+					 $scope.itms = response.data;
+					 $scope.itemsArray = response.data.items;
+			});
 });

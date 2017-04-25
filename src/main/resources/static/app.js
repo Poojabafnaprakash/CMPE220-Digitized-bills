@@ -30,5 +30,9 @@ angular.module('app', ['ngRoute','ngResource', 'app.userAuth', 'app.dashboard','
 	templateUrl: './splitTotal/splitTotal.html',
 	controller: 'SplitTotalCtrl'
   }) 
-  
+})
+.directive("navBar", function() {
+    return {
+    	templateUrl : './navigationMenu/navBar.html'
+    };
 });

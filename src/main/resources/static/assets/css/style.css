@@ -242,6 +242,11 @@ img { max-width: 100%; }
 	margin-top: 25px;
 }
 
+.navBarBg{
+	background-color: #3b3c3e;
+    height: 475px;
+}
+
 
 
 /***** Media queries *****/

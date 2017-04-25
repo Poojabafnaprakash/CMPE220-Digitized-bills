@@ -1,5 +1,5 @@
 
-angular.module('app', ['ngRoute','ngResource', 'app.userAuth', 'app.dashboard','app.landingPage','app.receiptsView','app.receiptsViewWithOption','app.splitItem','app.splitTotal'])
+angular.module('app', ['ngRoute','ngResource', 'app.userAuth', 'app.dashboard','app.landingPage','app.receiptsView','app.receiptsViewWithOption','app.splitItem','app.splitTotal', 'app.addReceipts'])
 .config(function($routeProvider, $locationProvider) {
   $routeProvider
   .when('/', {
@@ -13,6 +13,10 @@ angular.module('app', ['ngRoute','ngResource', 'app.userAuth', 'app.dashboard','
   .when('/dashboard', {
 	templateUrl: './dashboard/dashboard.html',
     controller: 'DashboardCtrl'
+  }) 
+  .when('/addReceipts', {
+	templateUrl: './addReceipts/addReceipts.html',
+	controller: 'AddReceiptsCtrl'
   }) 
   .when('/receiptsView', {
 	templateUrl: './receiptsView/receiptsView.html',
@@ -30,6 +34,7 @@ angular.module('app', ['ngRoute','ngResource', 'app.userAuth', 'app.dashboard','
 	templateUrl: './splitTotal/splitTotal.html',
 	controller: 'SplitTotalCtrl'
   }) 
+  
 })
 .directive("navBar", function() {
     return {

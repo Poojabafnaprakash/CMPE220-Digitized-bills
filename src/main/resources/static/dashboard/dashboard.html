@@ -102,3 +102,30 @@
   </div>
 </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal1" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content modelColor">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h4><span class="glyphicon glyphicon-book"></span> Add Receipts</h4>
+      </div>
+      <div class="modal-body">
+        <div class="modelMargin">
+        <button id="uploadButton" style="display:block;" class="btn btn-block" type="file" ngf-select="uploadFiles($file, $invalidFiles)"
+        accept="image/*" ngf-max-height="1000" ngf-max-size="1MB">Upload Receipts</button>
+         <button style="display:none;" class="btn btn-block" id="viewReceipt" type="button" ng-click="receiptsView()" data-dismiss="modal" >View Receipts</button>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal">
+          <span class="glyphicon glyphicon-remove"></span> Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,22 +1,23 @@
 <div class="navbar-default sidebar col-sm-2 navBarBg" role="navigation">
-    <div class="sidebar-nav navbar-collapse">
-        <ul class="nav in" id="side-menu">
-            <sidebar-search></sidebar-search>
-            <li ui-sref-active="active">
-                <a href="#!/dashboard"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
-            </li>
-            <li ui-sref-active="active">
+  <div class="sidebar-nav navbar-collapse">
+    <ul class="nav in" id="side-menu">
+      <sidebar-search></sidebar-search>
+      <li ui-sref-active="active">
+        <a href="#!/dashboard"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+      </li>
+      <li ui-sref-active="active">
 
-                <a href="#!/addReceipts"><i class="fa fa-bar-chart-o fa-fw"></i> Add Receipts<span></span></a>
+        <a data-toggle="modal" data-target="#myModal1"><i class="fa fa-bar-chart-o fa-fw"></i> Add Receipts<span></span></a>
 
-            </li>
-            <li ui-sref-active="active">
-                <a href="#!/receiptsView"><i class="fa fa-table fa-fw"></i> View Receipts</a>
-            </li>
-            <li ui-sref-active="active">
-                <a href="#!/createGroup"><i class="fa fa-edit fa-fw"></i> Create Group</a>
-            </li>   
-        </ul>
-    </div>
-    <!-- /.sidebar-collapse -->
-</div> 
+      </li>
+      <li ui-sref-active="active">
+        <a href="#!/receiptsView"><i class="fa fa-table fa-fw"></i> View Receipts</a>
+      </li>
+      <li ui-sref-active="active">
+        <a href="#!/createGroup"><i class="fa fa-edit fa-fw"></i> Create Group</a>
+      </li>
+    </ul>
+  </div>
+  <!-- /.sidebar-collapse -->
+</div>
+<!--href="#!/addReceipts"-->

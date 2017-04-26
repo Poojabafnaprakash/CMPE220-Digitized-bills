@@ -256,6 +256,9 @@ img { max-width: 100%; }
     margin-right: 30%;
 }
 
+.tableRow{
+	text-align: center;
+}
 
 /***** Media queries *****/
 

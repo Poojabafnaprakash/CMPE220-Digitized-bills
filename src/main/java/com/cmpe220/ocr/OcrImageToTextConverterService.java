@@ -2,6 +2,7 @@ package com.cmpe220.ocr;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cmpe220.model.Items;
 import com.cmpe220.object.Item;
 import com.cmpe220.object.JsonRequestWrapper;
 
@@ -22,8 +24,8 @@ import net.sourceforge.tess4j.TesseractException;
 @Service
 public class OcrImageToTextConverterService {
 
-	//private final static String DEFAULT_TESSDATA_PATH = "C://Users//vsaik//Desktop//Tesseract-OCR";
-	private final static String DEFAULT_TESSDATA_PATH = "/usr/local/share";
+	private final static String DEFAULT_TESSDATA_PATH = "C://Users//vsaik//Desktop//Tesseract-OCR";
+	//private final static String DEFAULT_TESSDATA_PATH = "/usr/local/share";
 	private final static String DEFAULT_PAGE_SEG_MODE = "3";
 	private final static String DEFAULT_LANG = "eng";
 
@@ -31,7 +33,7 @@ public class OcrImageToTextConverterService {
 		String textFromReceipt = null;
 		//File imageFile = new File("C://Users//vsaik//Desktop//bill.png");
 		//File imageFile = new File("./src/main/resources/receiptImage/bill1.png");
-		File imageFile = new File("./src/main/resources/receiptImage/bill2.png");
+		File imageFile = new File("C:\\Users\\vsaik\\Documents\\GitHub\\CMPE220-Digitized-bills\\src\\main\\resources\\receiptImage\\bill2.png");
 		Tesseract instance = new Tesseract();
 		instance.setLanguage(DEFAULT_LANG);
 		instance.setDatapath(DEFAULT_TESSDATA_PATH);
@@ -52,16 +54,16 @@ public class OcrImageToTextConverterService {
 	}
 
 	@ResponseBody
-	public JsonRequestWrapper getReceiptDetails() {
+	public JsonRequestWrapper getReceiptDetails(String name) {
 		OcrImageToTextConverterService serviceObj = new OcrImageToTextConverterService();
 		JsonRequestWrapper obj = new JsonRequestWrapper();
 		obj.setBillPath("filepath");
-		obj.setUserID(0);
-//		obj.setTax(serviceObj.getTaxFromReceipt());
-		obj.setTax(4.3);
-		//obj.setTotal(serviceObj.getTotalFromReceipt());
-		obj.setTotal(177.5);
-		obj.setBillName("costco");
+		//obj.setUserID(0);
+        obj.setTax(serviceObj.getTaxFromReceipt());
+		//obj.setTax(4.3);
+		obj.setTotal(serviceObj.getTotalFromReceipt());
+		//obj.setTotal(177.5);
+		obj.setBillName(name+"-"+new Date().toString());
 		obj.setItems(serviceObj.getItemsFromReceipt());
 		return obj;
 	}
@@ -82,23 +84,23 @@ public class OcrImageToTextConverterService {
 	}
 
 	@ResponseBody
-	public List<Item> getItemsFromReceipt() {
+	public List<Items> getItemsFromReceipt() {
 		String text = convertReceiptToText();
 		Map<String, Double> rates = new HashMap<String, Double>();
-		List<Item> items = new ArrayList<>();
-		Item item = null;
+		List<Items> items = new ArrayList<>();
+		Items item = null;
 		Scanner scanner = new Scanner(text);
 		while (scanner.hasNextLine()) {
 			String line = scanner.nextLine();
 			try {
 				if (line.length() > 0) {
 					if (Character.isDigit(line.charAt(line.length() - 1))) {
-						item = new Item();
+						item = new Items();
 						rates = extract(line);
 						for (Map.Entry<String, Double> o : rates.entrySet()) {
 							if (!o.getKey().equals("N/A")) {
 								item.setItemDescription(o.getKey());
-								item.setItemAmt(o.getValue());
+								item.setItemPrice(o.getValue());
 								items.add(item);
 							}
 
@@ -106,20 +108,20 @@ public class OcrImageToTextConverterService {
 
 					} else if (Character
 							.isDigit(line.charAt(line.length() - 2))) {
-						item = new Item();
+						item = new Items();
 						rates = extract(line.substring(0, line.length() - 1));
 						for (Map.Entry<String, Double> o : rates.entrySet()) {
 							item.setItemDescription(null);
-							item.setItemAmt(o.getValue());
+							item.setItemPrice(o.getValue());
 						}
 						items.add(item);
 					} else if (Character
 							.isDigit(line.charAt(line.length() - 3))) {
-						item = new Item();
+						item = new Items();
 						rates = extract(line.substring(0, line.length() - 2));
 						for (Map.Entry<String, Double> o : rates.entrySet()) {
 							item.setItemDescription(null);
-							item.setItemAmt(o.getValue());
+							item.setItemPrice(o.getValue());
 						}
 						items.add(item);
 					}
@@ -169,6 +171,7 @@ public class OcrImageToTextConverterService {
 		while (matcher.find()) {
 			totalResult = matcher.group(5);
 		}
+		totalResult = totalResult.replaceAll("\\s+","");
 		return Double.parseDouble(totalResult);
 	}
 
@@ -187,7 +190,7 @@ public class OcrImageToTextConverterService {
 		while (matcher.find()) {
 			tax = matcher.group(5);
 		}
-		
+		tax = tax.replaceAll("\\s+","");
 		return Double.parseDouble(tax);
 	}
 

@@ -29,6 +29,9 @@ public class Bill {
 	@Column(name="bill_path")
 	String billPath;
 	
+	@Column(name="bill_name")
+	String billName;
+	
 	@Column(name="flag")
 	String totOrItem;
 	
@@ -108,6 +111,22 @@ public class Bill {
 
 	public void setTotOrItem(String totOrItem) {
 		this.totOrItem = totOrItem;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getBillName() {
+		return billName;
+	}
+
+	public void setBillName(String billName) {
+		this.billName = billName;
 	}
 
 }

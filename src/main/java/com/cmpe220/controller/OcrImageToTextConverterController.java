@@ -2,15 +2,10 @@ package com.cmpe220.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import org.assertj.core.util.Sets;
-import org.hsqldb.lib.HashSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +21,6 @@ import com.cmpe220.model.User;
 import com.cmpe220.object.Item;
 import com.cmpe220.object.JsonRequestWrapper;
 import com.cmpe220.ocr.OcrImageToTextConverterService;
-import com.cmpe220.repository.SplitRepository;
 import com.cmpe220.service.BillService;
 import com.cmpe220.service.GetFriendsService;
 import com.cmpe220.service.ItemsService;
@@ -75,13 +69,12 @@ public class OcrImageToTextConverterController {
 			@RequestParam(value = "filePath", required = true, defaultValue = "None") String filePath,
 			Model model) {
 		model.addAttribute("name", filePath);
-		//obj.setTotal("73.33");
+		// obj.setTotal("73.33");
 		model.addAttribute("object", obj);
 		return "bill";
 	}
 
 	public String redirectToDashboard(User user) {
-		System.out.println("User id is " + user.getUserId());
 		this.user = new User();
 		this.user = user;
 		return "redirect:/#!/dashboard";
@@ -89,38 +82,37 @@ public class OcrImageToTextConverterController {
 
 	@RequestMapping("/receiptInfo")
 	public JsonRequestWrapper getReceiptInfo() {
-		obj = getTextFromReceiptService.getReceiptDetails();
-		obj.setUserID(user.getUserId());
+		obj = getTextFromReceiptService.getReceiptDetails(user.getFirstName());
+		obj.setUserID(user.getId());
 		return obj;
 
 	}
-	
+
 	@PostMapping("/saveBillDetails")
 	public JsonRequestWrapper saveBill(@RequestBody JsonRequestWrapper obj) {
-		
+		this.obj = obj;
 		bill = new Bill();
 		items = new Items();
 		itemsList = new ArrayList<>();
-		//bill.setBillPath("C:\\Users\\vsaik\\Documents\\GitHub\\CMPE220-Digitized-bills\\src\\main\\resources\\receiptImage\\bill2.png");
-		bill.setBillPath("/Users/poojaprakashchand/Documents/Eclipse/CMPE220-Digitized-bills/src/main/resources/receiptImage/bill2.png");
+		bill.setBillPath("C:\\Users\\vsaik\\Documents\\GitHub\\CMPE220-Digitized-bills\\src\\main\\resources\\receiptImage\\bill2.png");
+		// bill.setBillPath("/Users/poojaprakashchand/Documents/Eclipse/CMPE220-Digitized-bills/src/main/resources/receiptImage/bill2.png");
 		bill.setTotal(obj.getTotal());
 		bill.setTax(obj.getTax());
 		bill.setUserId(user);
+		bill.setBillName(obj.getBillName());
 		bill.setTotOrItem(obj.getFlag());
 		bill = billservice.addBill(bill);
-		for (Item i : obj.getItems()) {
-			items = new Items();
-			items.setBillId(bill);
-			items.setItemDescription(i.getItemDescription());
-			items.setItemPrice(i.getItemAmt());
-			items = itemsService.addItems(items);
+		for (int i = 0; i < obj.getItems().size(); i++) {
+			obj.getItems().get(i).setBillId(bill);
+			items = itemsService.addItems(obj.getItems().get(i));
 			itemsList.add(items);
 		}
-		if(obj.getFlag().equals("T")){
+
+		if (obj.getFlag().equals("T")) {
 			obj.setItems(null);
 		}
-		
-		this.obj = obj;
+		obj.setUserID(user.getId());
+
 		return obj;
 	}
 
@@ -130,13 +122,13 @@ public class OcrImageToTextConverterController {
 		friendsList = getFriendsService.findFriends(user);
 		List<Integer> friendIds = new ArrayList<>();
 		for (Friend i : friendsList) {
-			friendIds.add(i.getFriendId().getUserId());
+			friendIds.add(i.getFriendId().getId());
 		}
 		List<User> names = new ArrayList<>();
 		names = userService.findUsers(friendIds);
 		return names;
 	}
-	
+
 	@PostMapping("/addFriends")
 	public String addFriends(@RequestBody JsonRequestWrapper object) {
 		int splitBy = 0;
@@ -157,17 +149,23 @@ public class OcrImageToTextConverterController {
 		} else {
 			int index = object.getItems().size() - 1;
 			while (index >= 0) {
-				int splitIndex = object.getItems().get(index).getSplitIds().size() - 1;
-				Double amount = (object.getItems().get(index).getItemAmt() / (splitIndex + 1));
-				while (splitIndex >= 0) {
-					splitReceipt = new SplitReceipt();
-					splitReceipt.setAmount(amount);
-					splitReceipt.setBillId(bill);
-					splitReceipt.setPaidBy(object.getPaidBy());
-					splitReceipt.setUserId(object.getItems().get(index)
-							.getSplitIds().get(splitIndex));
-					splitReceipt = splitService.addItems(splitReceipt);
-					splitIndex--;
+				if (object.getItems().get(index).getSplitIds() != null) {
+					int splitIndex = object.getItems().get(index).getSplitIds()
+							.size() - 1;
+					Double amount = (object.getItems().get(index)
+							.getItemPrice() / (splitIndex + 1));
+					while (splitIndex >= 0) {
+						splitReceipt = new SplitReceipt();
+						splitReceipt.setAmount(amount);
+						splitReceipt.setBillId(bill);
+						splitReceipt.setPaidBy(object.getItems().get(index)
+								.getPaidBy());
+						splitReceipt.setUserId(object.getItems().get(index)
+								.getSplitIds().get(splitIndex));
+						splitReceipt.setItemId(object.getItems().get(index));
+						splitReceipt = splitService.addItems(splitReceipt);
+						splitIndex--;
+					}
 				}
 
 				index--;
@@ -177,17 +175,16 @@ public class OcrImageToTextConverterController {
 		return "redirect:/#!/dashboard";
 	}
 
-	@PostMapping("/getEditableBills")
-	public List<Bill> getBills(Model model) {
+	@RequestMapping("/getEditableBills")
+	public List<Bill> getBills() {
 		bills = new ArrayList<>();
 		bills = billservice.findBills(user);
 		return bills;
 	}
 
-
 	@RequestMapping("/getItemsFromReceipt")
-	public List<Item> getItemsFromReceipt() {
-		List<Item> itm = getTextFromReceiptService.getItemsFromReceipt();
+	public List<Items> getItemsFromReceipt() {
+		List<Items> itm = getTextFromReceiptService.getItemsFromReceipt();
 		return itm;
 	}
 

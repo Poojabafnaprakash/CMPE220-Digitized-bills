@@ -2,6 +2,7 @@ package com.cmpe220.object;
 
 import java.util.List;
 
+import com.cmpe220.model.Items;
 import com.cmpe220.model.User;
 
 public class JsonRequestWrapper {
@@ -11,7 +12,7 @@ public class JsonRequestWrapper {
 	Double tax;
 	Double total;
 	String billName;
-	List<Item> items;
+	List<Items> items;
 	User paidBy;
 	List<User> splitIds;
 	String flag;
@@ -56,11 +57,11 @@ public class JsonRequestWrapper {
 		this.billName = billName;
 	}
 
-	public List<Item> getItems() {
+	public List<Items> getItems() {
 		return items;
 	}
 
-	public void setItems(List<Item> items) {
+	public void setItems(List<Items> items) {
 		this.items = items;
 	}
 

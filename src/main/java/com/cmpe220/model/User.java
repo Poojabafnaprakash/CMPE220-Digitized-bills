@@ -47,13 +47,7 @@ public class User {
 		this.dateUpdated = dateUpdated;
 	}
 
-	public int getUserId() {
-		return id;
-	}
-
-	public void setUserId(int id) {
-		this.id = id;
-	}
+	
 
 	public String getFirstName() {
 		return firstName;
@@ -93,5 +87,13 @@ public class User {
 
 	public void setDateUpdated(String dateUpdated) {
 		this.dateUpdated = dateUpdated;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }

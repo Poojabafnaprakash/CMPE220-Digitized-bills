@@ -68,7 +68,7 @@ public class ConnectController extends
 			currentUser.setFirstName(twitterName);
 			currentUser = userServiceObj.addUser(currentUser);
 			TwitterData twitterUserNew = new TwitterData(twitterId,
-					twitterName, currentUser.getUserId());
+					twitterName, currentUser.getId());
 			twitterDataServiceObj.addTwitterDataUser(twitterUserNew);
 		}
 

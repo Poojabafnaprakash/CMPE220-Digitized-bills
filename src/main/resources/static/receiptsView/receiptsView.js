@@ -43,12 +43,11 @@ angular.module('app.receiptsView', ['ngRoute', 'ngStorage'])
       if (item.isNew) {
         item.isNew = false;
       }
-      
-      console.log($scope.itemsArray);
-
-      // send on server
       //results.push($http.post('/saveUser', user));
     }
+    
+    // send on server
+    //console.log($scope.itms);
 
     //return $q.all(results);
   };

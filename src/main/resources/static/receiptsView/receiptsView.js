@@ -33,6 +33,7 @@ angular.module('app.receiptsView', ['ngRoute', 'ngStorage'])
   };
 
   $scope.saveTable = function() {
+	  console.log("in save table");
     var results = [];
     for (var i = $scope.itemsArray.length; i--;) {
       var item = $scope.itemsArray[i];

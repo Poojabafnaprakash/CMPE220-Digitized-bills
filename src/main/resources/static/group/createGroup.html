@@ -1,1 +1,33 @@
-create group
+<div ng-controller="CreateGroupCtrl">
+	<nav class="navbar navbar-default">
+		<form name="groupForm" ng-submit="saveGroup()">
+			<div>
+				<label>Group Name<input type="text" name="input"
+					ng-model="group.groupName" required ng-trim="false">
+				</label>
+			</div>
+			<div class="container-fluid">
+				<div ng-model="allFriends">
+					<div class="panel">
+						<h4>Select Friends</h4>
+						<div class="list-group">
+							<div class="list-group-item row">
+								<div class="col-sm-8" ng-repeat="friend in allFriends">
+									<p class="nav-text text-left">
+										<strong>{{friend.firstName}}</strong>
+									</p>
+									<p class="nav-text text-left small">{{friend.emailId}}</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div>
+
+				<button class="btn btn-primary">Save</button>
+
+			</div>
+		</form>
+	</nav>
+</div>

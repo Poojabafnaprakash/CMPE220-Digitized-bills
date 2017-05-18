@@ -1,6 +1,9 @@
 package com.cmpe220.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,21 +13,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.cmpe220.model.Bill;
 import com.cmpe220.model.Friend;
+import com.cmpe220.model.Groups;
 import com.cmpe220.model.Items;
 import com.cmpe220.model.SplitReceipt;
 import com.cmpe220.model.User;
-import com.cmpe220.object.Item;
+import com.cmpe220.model.UserGroups;
 import com.cmpe220.object.JsonRequestWrapper;
+import com.cmpe220.ocr.NotificationEmail;
 import com.cmpe220.ocr.OcrImageToTextConverterService;
 import com.cmpe220.service.BillService;
 import com.cmpe220.service.GetFriendsService;
+import com.cmpe220.service.GroupService;
 import com.cmpe220.service.ItemsService;
 import com.cmpe220.service.SplitService;
+import com.cmpe220.service.UserGroupService;
 import com.cmpe220.service.UserService;
 
 @RestController
@@ -49,8 +57,14 @@ public class OcrImageToTextConverterController {
 	@Autowired
 	private SplitService splitService;
 
-	public Bill bill;
+	@Autowired
+	private GroupService groupService;
 
+	@Autowired
+	private UserGroupService userGroupService;
+
+	public Bill bill;
+	public Groups groups;
 	public List<Bill> bills;
 	public List<Friend> friendsList;
 
@@ -60,7 +74,7 @@ public class OcrImageToTextConverterController {
 	public List<Items> itemsList;
 
 	public User user;
-
+	public List<User> names = new ArrayList<>();
 	JsonRequestWrapper obj = new JsonRequestWrapper();
 
 	@CrossOrigin(origins = "*")
@@ -124,7 +138,7 @@ public class OcrImageToTextConverterController {
 		for (Friend i : friendsList) {
 			friendIds.add(i.getFriendId().getId());
 		}
-		List<User> names = new ArrayList<>();
+
 		names = userService.findUsers(friendIds);
 		return names;
 	}
@@ -140,6 +154,8 @@ public class OcrImageToTextConverterController {
 				splitReceipt = new SplitReceipt();
 				splitReceipt.setAmount(amount);
 				splitReceipt.setBillId(bill);
+				splitReceipt.setDateCreated(new java.sql.Date(new Date()
+						.getTime()));
 				splitReceipt.setPaidBy(object.getPaidBy());
 				splitReceipt.setUserId(object.getSplitIds().get(index));
 				splitReceipt = splitService.addItems(splitReceipt);
@@ -158,6 +174,8 @@ public class OcrImageToTextConverterController {
 						splitReceipt = new SplitReceipt();
 						splitReceipt.setAmount(amount);
 						splitReceipt.setBillId(bill);
+						splitReceipt.setDateCreated(new java.sql.Date(
+								new Date().getTime()));
 						splitReceipt.setPaidBy(object.getItems().get(index)
 								.getPaidBy());
 						splitReceipt.setUserId(object.getItems().get(index)
@@ -182,6 +200,36 @@ public class OcrImageToTextConverterController {
 		return bills;
 	}
 
+	@RequestMapping("/createGroup")
+	public Groups createGroup() {
+		this.groups = new Groups();
+		this.groups.setGroupName("Enter Group Name");
+		this.groups.setUserIds(names);
+		return this.groups;
+	}
+
+	@RequestMapping("/saveFriendsGroup")
+	public Groups saveFriendsGroup(@RequestBody Groups groups) {
+		System.out.println("In save group method");
+		UserGroups us = null;
+		this.groups = groupService.createGroup(groups);
+		for (User u : groups.getUserIds()) {
+			us = new UserGroups();
+			us.setUserId(u);
+			us.setGroups(this.groups);
+			userGroupService.saveFriends(us);
+		}
+		return this.groups;
+	}
+
+	@RequestMapping("/viewGroups")
+	@ResponseBody
+	public List<Groups> viewGroup() {
+		List<Groups> groups = new ArrayList<>();
+		groups = groupService.getAllGroups();
+		return groups;
+	}
+
 	@RequestMapping("/getItemsFromReceipt")
 	public List<Items> getItemsFromReceipt() {
 		List<Items> itm = getTextFromReceiptService.getItemsFromReceipt();
@@ -200,5 +248,27 @@ public class OcrImageToTextConverterController {
 		Double total = null;
 		total = getTextFromReceiptService.getTaxFromReceipt();
 		return total;
+	}
+
+	@RequestMapping("/monthlyExpenditure")
+	public Integer getmonthlyExpenditure() {
+		Integer expen = 0;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+		try {
+			java.util.Date date1 = format.parse("2017/04/01");
+			java.util.Date date2 = format.parse("2017/04/30");
+			expen = splitService.findMonthlyExpen(user,
+					new java.sql.Date(date1.getTime()),
+					new java.sql.Date(date2.getTime()));
+			if (expen != null) {
+				NotificationEmail.emailRecommendTrigger(user.getFirstName(),
+						expen.toString(), user.getEmailId());
+			}
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		return expen;
 	}
 }

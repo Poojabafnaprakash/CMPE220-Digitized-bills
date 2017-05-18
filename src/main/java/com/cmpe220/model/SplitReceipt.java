@@ -1,5 +1,7 @@
 package com.cmpe220.model;
 
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,13 +43,16 @@ public class SplitReceipt {
 	@Column(name="amount")
 	Double amount;
 	
+	@Column(name="date_created")
+	Date dateCreated;
+	
 	
 	public SplitReceipt() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public SplitReceipt(int receiptId, User userId, Bill billId, Items itemId, Double amount, User paidBy) {
+	public SplitReceipt(int receiptId, User userId, Bill billId, Items itemId, Double amount, User paidBy, Date dateCreated) {
 		super();
 		this.receiptId = receiptId;
 		this.userId = userId;
@@ -56,6 +61,7 @@ public class SplitReceipt {
 		//this.friendId = friendId;
 		this.itemId = itemId;
 		this.amount = amount;
+		this.dateCreated=dateCreated;
 	}
 
 	public int getReceiptId() {
@@ -112,6 +118,14 @@ public class SplitReceipt {
 
 	public void setPaidBy(User paidBy) {
 		this.paidBy = paidBy;
+	}
+
+	public Date getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
 	}
 
 	

@@ -1,24 +1,16 @@
 package com.cmpe220.controller;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.cmpe220.model.TwitterData;
 import com.cmpe220.model.User;
@@ -66,6 +58,7 @@ public class ConnectController extends
 		} else {
 			currentUser = new User();
 			currentUser.setFirstName(twitterName);
+			//currentUser.setEmailId(twitter.userOperations().getUserProfile());
 			currentUser = userServiceObj.addUser(currentUser);
 			TwitterData twitterUserNew = new TwitterData(twitterId,
 					twitterName, currentUser.getId());

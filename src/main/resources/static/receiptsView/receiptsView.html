@@ -95,8 +95,8 @@
                           </span>
                         </td>
                         <td>
-                          <span editable-text="item.itemAmt" e-form="tableform">
-                            ${{ item.itemAmt || 'Not Defined' }}
+                          <span editable-text="item.itemPrice" e-form="tableform">
+                            ${{ item.itemPrice || 'Not Defined' }}
                           </span>
                         </td>
                       </tr>
@@ -123,17 +123,29 @@
                 </div>
               </div>
             </div>
+
             <!-- buttons -->
-            <div class="btn-edit">
-              <button type="button" class="btn btn-default" ng-show="!tableform.$visible" ng-click="tableform.$show()">
-                edit
+            <div class="row">
+              <div class="btn-edit col-sm-6 col-sm-push-1">
+                <button type="button" class="btn btn-default" ng-show="!tableform.$visible" ng-click="tableform.$show()">
+                  Edit Receipt
+                </button>
+              </div>
+              <div class="btn-form" ng-show="tableform.$visible">
+                <button type="submit" ng-disabled="tableform.$waiting" class="btn btn-primary">Save</button>
+                <button type="button" ng-disabled="tableform.$waiting" ng-click="tableform.$cancel()" class="btn btn-default">Cancel</button>
+              </div>
+            </form>
+            <form editable-form name="splitTable" onaftersave="saveTable()" ng-hide="tableform.$visible">
+              <button type="button" class="btn btn-default col-sm-4" ng-show="!splitTable.$visible" ng-click="splitTable.$show()"> Choose Split Option
               </button>
-            </div>
-            <div class="btn-form" ng-show="tableform.$visible">
-              <button type="submit" ng-disabled="tableform.$waiting" class="btn btn-primary">save</button>
-              <button type="button" ng-disabled="tableform.$waiting" ng-click="tableform.$cancel()" class="btn btn-default">cancel</button>
-            </div>
-          </form>
+              <div class="btn-form col-sm-5" ng-show="splitTable.$visible">
+                <input type="radio" ng-model="split" value="I" ng-disabled="splitTable.$waiting">Itemized
+                <input type="radio" ng-model="split" value="T" ng-disabled="splitTable.$waiting">Total
+                <button type="submit" ng-disabled="splitTable.$waiting" class="btn btn-primary">Save</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>

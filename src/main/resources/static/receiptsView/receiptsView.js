@@ -16,6 +16,7 @@ angular.module('app.receiptsView', ['ngRoute', 'ngStorage'])
 					 $scope.itms = response.data;
 					 $scope.itemsArray = response.data.items;
 			});
+
       // cancel all changes
   $scope.cancel = function() {
     for (var i = $scope.itemsArray.length; i--;) {
@@ -32,6 +33,7 @@ angular.module('app.receiptsView', ['ngRoute', 'ngStorage'])
   };
 
   $scope.saveTable = function() {
+	  console.log("in save table");
     var results = [];
     for (var i = $scope.itemsArray.length; i--;) {
       var item = $scope.itemsArray[i];
@@ -44,13 +46,19 @@ angular.module('app.receiptsView', ['ngRoute', 'ngStorage'])
         item.isNew = false;
       }
       //results.push($http.post('/saveUser', user));
+      //console.log($scope.itms);
     }
-    
+    if($scope.split === 'I'){
+      $scope.itms.flag = 'I'
+    }
+    else{
+      $scope.itms.flag = 'T'
+    }
+
     // send on server
-    //console.log($scope.itms);
+    console.log($scope.itms);
 
     //return $q.all(results);
   };
-
 
 });

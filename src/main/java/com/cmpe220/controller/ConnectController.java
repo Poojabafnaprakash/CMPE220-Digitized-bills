@@ -58,7 +58,7 @@ public class ConnectController extends
 		} else {
 			currentUser = new User();
 			currentUser.setFirstName(twitterName);
-			//currentUser.setEmailId(twitter.userOperations().getUserProfile());
+			// currentUser.setEmailId(twitter.userOperations().getUserProfile());
 			currentUser = userServiceObj.addUser(currentUser);
 			TwitterData twitterUserNew = new TwitterData(twitterId,
 					twitterName, currentUser.getId());
@@ -80,6 +80,12 @@ public class ConnectController extends
 		User currentUser = userServiceObj.getUser(twitterUser.getUserId());
 
 		return currentUser;
+	}
+
+	@RequestMapping(value = "/logout", method = RequestMethod.GET, produces = "application/json")
+	public String logout() {
+		twitter = null;
+		return "hello";
 	}
 
 }

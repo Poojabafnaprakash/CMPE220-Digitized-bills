@@ -28,6 +28,7 @@ public class SplitService {
 		return splitRepository.findMonthlyExpenYear(user);
 	}
 
+	
 	public List<SplitReceipt> findOweDetails(User user) {
 		return splitRepository.findOweDetails(user);
 	}

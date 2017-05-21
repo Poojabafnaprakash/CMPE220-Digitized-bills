@@ -32,6 +32,7 @@ public interface SplitRepository extends CrudRepository<SplitReceipt, Integer> {
 	@Query("SELECT SUM(b.amount) FROM SplitReceipt b WHERE b.userId = :userId")
 	public Integer findTotalYouOwe(@Param("userId") User userId);
 	
+	
 	@Query("SELECT SUM(b.amount) FROM SplitReceipt b WHERE b.paidBy = :userId")
 	public Integer findTotalYouAreOwed(@Param("userId") User userId);
 }

@@ -12,7 +12,7 @@ import com.cmpe220.model.User;
 
 public interface BillRepository  extends CrudRepository<Bill, Integer> {
 	
-	 @Query("SELECT b FROM Bill b WHERE b.UserId = :userId")
+	 @Query("SELECT b FROM Bill b WHERE b.userId = :userId")
 	  public List<Bill> findBills(@Param("userId") User userId);
 
 }

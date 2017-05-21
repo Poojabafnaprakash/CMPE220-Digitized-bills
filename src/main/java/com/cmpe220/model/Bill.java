@@ -45,7 +45,7 @@ public class Bill {
 
 	@OneToOne
 	@JoinColumn(name="user_id")
-	User UserId;
+	User userId;
 	
 	@OneToMany(mappedBy="billId")
 	private Set<Items> items;
@@ -56,7 +56,7 @@ public class Bill {
 		this.tax = tax;
 		this.total = total;
 		this.billPath = billPath;
-		UserId = userId;
+		userId = userId;
 		this.items = items;
 		this.totOrItem = totOrItem;
 	}
@@ -98,11 +98,11 @@ public class Bill {
 	}
 
 	public User getUserId() {
-		return UserId;
+		return userId;
 	}
 
 	public void setUserId(User userId) {
-		UserId = userId;
+		this.userId = userId;
 	}
 
 	public String getTotOrItem() {

@@ -70,18 +70,18 @@ img { max-width: 100%; }
     border-radius: 50%;
 }
 .nav-text{
-	color:#fff
+	color:#000
 }
 .navbar-login-session
 {
-	background-color: #555;
+	background-color: #ffffff;
 }
 .navbar-login
 {
     width: 305px;
     padding: 10px;
     padding-bottom: 0px;
-	background-color: #555;
+	background-color: #ffffff;
 }
 .dropdown-menu{
 	background-color: #555

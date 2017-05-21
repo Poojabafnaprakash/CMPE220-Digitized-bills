@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import com.cmpe220.model.SplitReceipt;
 import com.cmpe220.model.User;
 import com.cmpe220.model.UserGroups;
 import com.cmpe220.object.JsonRequestWrapper;
+import com.cmpe220.object.MonthlyExpen;
 import com.cmpe220.ocr.NotificationEmail;
 import com.cmpe220.ocr.OcrImageToTextConverterService;
 import com.cmpe220.service.BillService;
@@ -90,7 +92,6 @@ public class OcrImageToTextConverterController {
 
 	public String redirectToDashboard(User user) {
 		this.user = new User();
-		System.out.println("Hi");
 		this.user = user;
 		return "redirect:/#!/dashboard";
 	}
@@ -109,7 +110,7 @@ public class OcrImageToTextConverterController {
 		bill = new Bill();
 		items = new Items();
 		itemsList = new ArrayList<>();
-		bill.setBillPath("C:\\Users\\vsaik\\Documents\\GitHub\\CMPE220-Digitized-bills\\src\\main\\resources\\receiptImage\\bill2.png");
+		bill.setBillPath("C://Users//vsaik//Desktop//bill.png");
 		// bill.setBillPath("/Users/poojaprakashchand/Documents/Eclipse/CMPE220-Digitized-bills/src/main/resources/receiptImage/bill2.png");
 		bill.setTotal(obj.getTotal());
 		bill.setTax(obj.getTax());
@@ -142,6 +143,11 @@ public class OcrImageToTextConverterController {
 
 		names = userService.findUsers(friendIds);
 		return names;
+	}
+
+	@RequestMapping("/user")
+	public User getUser() {
+		return user;
 	}
 
 	@PostMapping("/addFriends")
@@ -210,20 +216,18 @@ public class OcrImageToTextConverterController {
 	}
 
 	@RequestMapping("/saveFriendsGroup")
-	public Groups saveFriendsGroup(@RequestBody Groups groups) {
-		System.out.println("In save group method");
+	public String saveFriendsGroup(@RequestBody Groups groups) {
 		UserGroups us = null;
-		for(User g: groups.getUserIds()){
-			System.out.println("Checked is "+g.getChecked());
-		}
 		this.groups = groupService.createGroup(groups);
 		for (User u : groups.getUserIds()) {
-			us = new UserGroups();
-			us.setUserId(u);
-			us.setGroups(this.groups);
-			userGroupService.saveFriends(us);
+			if (!(u.getChecked().equals(null)) && u.getChecked().equals("Yes")) {
+				us = new UserGroups();
+				us.setUserId(u);
+				us.setGroups(this.groups);
+				userGroupService.saveFriends(us);
+			}
 		}
-		return this.groups;
+		return "redirect:/#!/dashboard";
 	}
 
 	@RequestMapping("/viewGroups")
@@ -234,45 +238,51 @@ public class OcrImageToTextConverterController {
 		return groups;
 	}
 
-//	@RequestMapping("/getItemsFromReceipt")
-//	public List<Items> getItemsFromReceipt() {
-//		List<Items> itm = getTextFromReceiptService.getItemsFromReceipt();
-//		return itm;
-//	}
-//
-//	@RequestMapping("/getTotalFromReceipt")
-//	public Double getTotalFromReceipt() {
-//		Double total = null;
-//		total = getTextFromReceiptService.getTotalFromReceipt();
-//		return total;
-//	}
-//
-//	@RequestMapping("/getTaxFromReceipt")
-//	public Double getTaxFromReceipt() {
-//		Double total = null;
-//		total = getTextFromReceiptService.getTaxFromReceipt();
-//		return total;
-//	}
+	// @RequestMapping("/getItemsFromReceipt")
+	// public List<Items> getItemsFromReceipt() {
+	// List<Items> itm = getTextFromReceiptService.getItemsFromReceipt();
+	// return itm;
+	// }
+	//
+	// @RequestMapping("/getTotalFromReceipt")
+	// public Double getTotalFromReceipt() {
+	// Double total = null;
+	// total = getTextFromReceiptService.getTotalFromReceipt();
+	// return total;
+	// }
+	//
+	// @RequestMapping("/getTaxFromReceipt")
+	// public Double getTaxFromReceipt() {
+	// Double total = null;
+	// total = getTextFromReceiptService.getTaxFromReceipt();
+	// return total;
+	// }
 
 	@RequestMapping("/monthlyExpenditure")
-	public Integer getmonthlyExpenditure() {
-		Integer expen = 0;
+	public List<MonthlyExpen> getmonthlyExpenditure() {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-		try {
-			java.util.Date date1 = format.parse("2017/04/01");
-			java.util.Date date2 = format.parse("2017/04/30");
-			expen = splitService.findMonthlyExpen(user,
-					new java.sql.Date(date1.getTime()),
-					new java.sql.Date(date2.getTime()));
-			if (expen != null) {
-				NotificationEmail.emailRecommendTrigger(user.getFirstName(),
-						expen.toString(), user.getEmailId());
-			}
-
-		} catch (ParseException e) {
-			e.printStackTrace();
+		List<MonthlyExpen> expens = new ArrayList<MonthlyExpen>();
+		MonthlyExpen expen = new MonthlyExpen();
+		// try {
+		// java.util.Date date1 = format.parse("2017/04/01");
+		// java.util.Date date2 = format.parse("2017/04/30");
+		String[] expenArray = splitService.findMonthlyExpenYear(user, "2017");
+		// if (expenArray != null) {
+		// NotificationEmail.emailRecommendTrigger(user.getFirstName(),
+		// expen.toString(), user.getEmailId());
+		// }
+		for (int i = 0; i < expenArray.length; i++) {
+			expen = new MonthlyExpen();
+			String[] arr = expenArray[i].split(",");
+			expen.setExpen(arr[0]);
+			expen.setMonth(arr[1]);
+			expens.add(expen);
 		}
 
-		return expen;
+		// } catch (ParseException e) {
+		// e.printStackTrace();
+		// }
+
+		return expens;
 	}
 }

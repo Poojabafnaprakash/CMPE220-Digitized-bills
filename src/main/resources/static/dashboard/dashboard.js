@@ -43,8 +43,22 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'ngFileUpload'])
         }
 	});
 	
+	$http({
+		method: 'GET',
+		url: '/user'
+	}).then(function(response){
+			 $scope.user = response.data;
+	});
+	
 	$scope.receiptsView = function(){
 		window.location.assign("/#!receiptsView");
 	}
+	
+	$scope.logout = function() {
+		$http({
+			method : 'GET',
+			url : '/connect/logout'
+		})
+	};
 	
 }]);

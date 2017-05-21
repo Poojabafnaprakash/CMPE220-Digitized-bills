@@ -21,10 +21,9 @@ public class SplitService {
 
 	public int findMonthlyExpen(User user, Date date1,
 			Date date2) {
-		System.out.println("in monthly exen service "+date1);
-		System.out.println("in monthly exen service "+date2);
-		System.out.println("in monthly exen service "+user);
 		return splitRepository.findMonthlyExpen(user, date1, date2);
 	}
-
+	public String[] findMonthlyExpenYear(User user, String year) {
+		return splitRepository.findMonthlyExpenYear(user);
+	}
 }

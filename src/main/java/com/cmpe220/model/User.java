@@ -33,7 +33,7 @@ public class User {
 	String dateUpdated;
 	
 	@Transient
-	String checked;
+	String checked = "No";
 	
 	public User(){
 		

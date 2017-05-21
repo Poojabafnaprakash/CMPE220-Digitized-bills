@@ -24,15 +24,15 @@ import net.sourceforge.tess4j.TesseractException;
 @Service
 public class OcrImageToTextConverterService {
 
-	//private final static String DEFAULT_TESSDATA_PATH = "C://Users//vsaik//Desktop//Tesseract-OCR";
-	private final static String DEFAULT_TESSDATA_PATH = "/usr/local/share";
+	private final static String DEFAULT_TESSDATA_PATH = "C://Users//vsaik//Desktop//Tesseract-OCR";
+	//private final static String DEFAULT_TESSDATA_PATH = "/usr/local/share";
 	private final static String DEFAULT_PAGE_SEG_MODE = "3";
 	private final static String DEFAULT_LANG = "eng";
 
 	public String convertReceiptToText() {
 		String textFromReceipt = null;
-		//File imageFile = new File("C://Users//vsaik//Desktop//bill.png");
-		File imageFile = new File("./src/main/resources/receiptImage/bill2.png");
+		File imageFile = new File("C://Users//vsaik//Desktop//bill.png");
+		//File imageFile = new File("./src/main/resources/receiptImage/bill2.png");
 		//File imageFile = new File("C:\\Users\\vsaik\\Documents\\GitHub\\CMPE220-Digitized-bills\\src\\main\\resources\\receiptImage\\bill2.png");
 		Tesseract instance = new Tesseract();
 		instance.setLanguage(DEFAULT_LANG);

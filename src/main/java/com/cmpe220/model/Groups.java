@@ -31,6 +31,10 @@ public class Groups {
 	@Transient
 	List<User> userIds;
 	
+	@Transient
+	String checked;
+
+	
 	public Groups(){
 		
 	}
@@ -85,4 +89,13 @@ public class Groups {
 	public void setId(int id) {
 		this.id = id;
 	}
+
+	public String getChecked() {
+		return checked;
+	}
+
+	public void setChecked(String checked) {
+		this.checked = checked;
+	}
+
 }

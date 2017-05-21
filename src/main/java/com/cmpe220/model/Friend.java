@@ -32,8 +32,6 @@ public class Friend {
 	@JoinColumn(name="friend_id")
 	User friendId;
 	
-	
-	
 	public User getUserId() {
 		return userId;
 	}
@@ -86,5 +84,7 @@ public class Friend {
 	public void setId(int id) {
 		this.id = id;
 	}
+
+
 
 }

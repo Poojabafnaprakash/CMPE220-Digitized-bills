@@ -14,9 +14,11 @@
 							<div class="list-group-item row">
 								<div class="col-sm-8" ng-repeat="friend in allFriends">
 									<p class="nav-text text-left">
-										<strong>{{friend.firstName}}</strong>
+										<input type="checkbox" value="{{friend.firstName}}" ng-click="change($index)">{{friend.firstName}}<br>
+										<br>
 									</p>
 									<p class="nav-text text-left small">{{friend.emailId}}</p>
+
 								</div>
 							</div>
 						</div>

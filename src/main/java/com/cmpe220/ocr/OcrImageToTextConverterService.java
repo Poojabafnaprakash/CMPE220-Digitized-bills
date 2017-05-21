@@ -24,16 +24,16 @@ import net.sourceforge.tess4j.TesseractException;
 @Service
 public class OcrImageToTextConverterService {
 
-	private final static String DEFAULT_TESSDATA_PATH = "C://Users//vsaik//Desktop//Tesseract-OCR";
-	//private final static String DEFAULT_TESSDATA_PATH = "/usr/local/share";
+	//private final static String DEFAULT_TESSDATA_PATH = "C://Users//vsaik//Desktop//Tesseract-OCR";
+	private final static String DEFAULT_TESSDATA_PATH = "/usr/local/share";
 	private final static String DEFAULT_PAGE_SEG_MODE = "3";
 	private final static String DEFAULT_LANG = "eng";
 
 	public String convertReceiptToText() {
 		String textFromReceipt = null;
 		//File imageFile = new File("C://Users//vsaik//Desktop//bill.png");
-		//File imageFile = new File("./src/main/resources/receiptImage/bill1.png");
-		File imageFile = new File("C:\\Users\\vsaik\\Documents\\GitHub\\CMPE220-Digitized-bills\\src\\main\\resources\\receiptImage\\bill2.png");
+		File imageFile = new File("./src/main/resources/receiptImage/bill2.png");
+		//File imageFile = new File("C:\\Users\\vsaik\\Documents\\GitHub\\CMPE220-Digitized-bills\\src\\main\\resources\\receiptImage\\bill2.png");
 		Tesseract instance = new Tesseract();
 		instance.setLanguage(DEFAULT_LANG);
 		instance.setDatapath(DEFAULT_TESSDATA_PATH);
@@ -56,15 +56,16 @@ public class OcrImageToTextConverterService {
 	@ResponseBody
 	public JsonRequestWrapper getReceiptDetails(String name) {
 		OcrImageToTextConverterService serviceObj = new OcrImageToTextConverterService();
+		String text = convertReceiptToText();
 		JsonRequestWrapper obj = new JsonRequestWrapper();
 		obj.setBillPath("filepath");
 		//obj.setUserID(0);
-        obj.setTax(serviceObj.getTaxFromReceipt());
+        obj.setTax(serviceObj.getTaxFromReceipt(text));
 		//obj.setTax(4.3);
-		obj.setTotal(serviceObj.getTotalFromReceipt());
+		obj.setTotal(serviceObj.getTotalFromReceipt(text));
 		//obj.setTotal(177.5);
 		obj.setBillName(name+"-"+new Date().toString());
-		obj.setItems(serviceObj.getItemsFromReceipt());
+		obj.setItems(serviceObj.getItemsFromReceipt(text));
 		return obj;
 	}
 
@@ -84,8 +85,8 @@ public class OcrImageToTextConverterService {
 	}
 
 	@ResponseBody
-	public List<Items> getItemsFromReceipt() {
-		String text = convertReceiptToText();
+	public List<Items> getItemsFromReceipt(String text) {
+		//String text = convertReceiptToText();
 		Map<String, Double> rates = new HashMap<String, Double>();
 		List<Items> items = new ArrayList<>();
 		Items item = null;
@@ -154,8 +155,8 @@ public class OcrImageToTextConverterService {
 	}
 
 	@ResponseBody
-	public Double getTotalFromReceipt() {
-		String text = convertReceiptToText();
+	public Double getTotalFromReceipt(String text) {
+		//String text = convertReceiptToText();
 		String totalResult = null;
 		List<String> tokens = new ArrayList<String>();
 		tokens.add("Total Due");
@@ -176,8 +177,8 @@ public class OcrImageToTextConverterService {
 	}
 
 	@ResponseBody
-	public Double getTaxFromReceipt() {
-		String text = convertReceiptToText();
+	public Double getTaxFromReceipt(String text) {
+		//String text = convertReceiptToText();
 		String tax = null;
 		List<String> tokens = new ArrayList<String>();
 		tokens.add("Tax");

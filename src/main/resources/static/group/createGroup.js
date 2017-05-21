@@ -16,7 +16,7 @@ angular.module('app.createGroup', [ 'ngRoute', 'ngStorage' ])
 			}).then(function(response) {
 				console.log(response.data);
 				$scope.group = response.data;
-				$scope.allFriends = response.data.userIds;
+				$scope.allFriends = $scope.group.userIds;
 
 			});
 			$scope.saveGroup = function() {
@@ -25,6 +25,11 @@ angular.module('app.createGroup', [ 'ngRoute', 'ngStorage' ])
 					url : '/saveFriendsGroup',
 					data : $scope.group
 				})
+			};
+			$scope.change = function(id) {
+				console.log($scope.allFriends[id]);
+				$scope.allFriends[id].checked = 'Yes';
+				$scope.group.userIds = $scope.allFriends;
 			};
 
 		} ]);

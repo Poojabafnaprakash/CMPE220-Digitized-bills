@@ -234,25 +234,25 @@ public class OcrImageToTextConverterController {
 		return groups;
 	}
 
-	@RequestMapping("/getItemsFromReceipt")
-	public List<Items> getItemsFromReceipt() {
-		List<Items> itm = getTextFromReceiptService.getItemsFromReceipt();
-		return itm;
-	}
-
-	@RequestMapping("/getTotalFromReceipt")
-	public Double getTotalFromReceipt() {
-		Double total = null;
-		total = getTextFromReceiptService.getTotalFromReceipt();
-		return total;
-	}
-
-	@RequestMapping("/getTaxFromReceipt")
-	public Double getTaxFromReceipt() {
-		Double total = null;
-		total = getTextFromReceiptService.getTaxFromReceipt();
-		return total;
-	}
+//	@RequestMapping("/getItemsFromReceipt")
+//	public List<Items> getItemsFromReceipt() {
+//		List<Items> itm = getTextFromReceiptService.getItemsFromReceipt();
+//		return itm;
+//	}
+//
+//	@RequestMapping("/getTotalFromReceipt")
+//	public Double getTotalFromReceipt() {
+//		Double total = null;
+//		total = getTextFromReceiptService.getTotalFromReceipt();
+//		return total;
+//	}
+//
+//	@RequestMapping("/getTaxFromReceipt")
+//	public Double getTaxFromReceipt() {
+//		Double total = null;
+//		total = getTextFromReceiptService.getTaxFromReceipt();
+//		return total;
+//	}
 
 	@RequestMapping("/monthlyExpenditure")
 	public Integer getmonthlyExpenditure() {

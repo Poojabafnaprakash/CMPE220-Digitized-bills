@@ -75,6 +75,7 @@ public class OcrImageToTextConverterController {
 	public List<SplitReceipt> splitReceipts;
 	public List<Items> itemsList;
 
+	public HashMap<Integer, String> userMap = new HashMap<Integer, String>();
 	public User user;
 	public List<User> names = new ArrayList<>();
 	JsonRequestWrapper obj = new JsonRequestWrapper();
@@ -85,7 +86,6 @@ public class OcrImageToTextConverterController {
 			@RequestParam(value = "filePath", required = true, defaultValue = "None") String filePath,
 			Model model) {
 		model.addAttribute("name", filePath);
-		// obj.setTotal("73.33");
 		model.addAttribute("object", obj);
 		return "bill";
 	}
@@ -142,6 +142,10 @@ public class OcrImageToTextConverterController {
 		}
 
 		names = userService.findUsers(friendIds);
+		for (User u : names) {
+			userMap.put(u.getId(), u.getFirstName());
+		}
+		userMap.put(user.getId(), user.getFirstName());
 		return names;
 	}
 
@@ -260,17 +264,9 @@ public class OcrImageToTextConverterController {
 
 	@RequestMapping("/monthlyExpenditure")
 	public List<MonthlyExpen> getmonthlyExpenditure() {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
 		List<MonthlyExpen> expens = new ArrayList<MonthlyExpen>();
 		MonthlyExpen expen = new MonthlyExpen();
-		// try {
-		// java.util.Date date1 = format.parse("2017/04/01");
-		// java.util.Date date2 = format.parse("2017/04/30");
 		String[] expenArray = splitService.findMonthlyExpenYear(user, "2017");
-		// if (expenArray != null) {
-		// NotificationEmail.emailRecommendTrigger(user.getFirstName(),
-		// expen.toString(), user.getEmailId());
-		// }
 		for (int i = 0; i < expenArray.length; i++) {
 			expen = new MonthlyExpen();
 			String[] arr = expenArray[i].split(",");
@@ -279,10 +275,48 @@ public class OcrImageToTextConverterController {
 			expens.add(expen);
 		}
 
-		// } catch (ParseException e) {
-		// e.printStackTrace();
-		// }
-
 		return expens;
+	}
+
+	@RequestMapping("/youOwe")
+	public List<String> getYouOwe() {
+		List<String> youOwe = new ArrayList<String>();
+		List<SplitReceipt> sp = new ArrayList<SplitReceipt>();
+		sp = splitService.findOweDetails(user);
+		for (SplitReceipt s : sp) {
+			youOwe.add("You owe " + userMap.get(s.getPaidBy().getId()) + " "
+					+ s.getAmount() + "$.");
+		}
+		return youOwe;
+	}
+
+	@RequestMapping("/youAreOwed")
+	public List<String> getYouAreOwed() {
+		List<String> youOwe = new ArrayList<String>();
+		List<SplitReceipt> sp = new ArrayList<SplitReceipt>();
+		sp = splitService.findOwedDetails(user);
+		for (SplitReceipt s : sp) {
+			youOwe.add("You are Owed " + s.getAmount() + "$ by "
+					+ userMap.get(s.getUserId().getId()) + ".");
+		}
+		return youOwe;
+	}
+	
+
+	@RequestMapping("/totalYouOwe")
+	public String getTotalYouOwe() {
+		String youOwe = null;
+		int amount = splitService.findTotalYouOwe(user);
+			youOwe ="Total amount you owe is "+amount+"$.";
+		return youOwe;
+	}
+	
+
+	@RequestMapping("/totalYouAreOwed")
+	public String getTotalYouAreOwed() {
+		String youOwe = null;
+		int amount = splitService.findTotalYouAreOwed(user);
+		youOwe ="Total amount you are owed is "+amount+"$.";
+		return youOwe;
 	}
 }

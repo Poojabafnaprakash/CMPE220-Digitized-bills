@@ -90,6 +90,7 @@ public class OcrImageToTextConverterController {
 
 	public String redirectToDashboard(User user) {
 		this.user = new User();
+		System.out.println("Hi");
 		this.user = user;
 		return "redirect:/#!/dashboard";
 	}

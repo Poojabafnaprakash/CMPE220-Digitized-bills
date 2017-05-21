@@ -212,6 +212,9 @@ public class OcrImageToTextConverterController {
 	public Groups saveFriendsGroup(@RequestBody Groups groups) {
 		System.out.println("In save group method");
 		UserGroups us = null;
+		for(User g: groups.getUserIds()){
+			System.out.println("Checked is "+g.getChecked());
+		}
 		this.groups = groupService.createGroup(groups);
 		for (User u : groups.getUserIds()) {
 			us = new UserGroups();

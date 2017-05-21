@@ -1,4 +1,4 @@
-angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'ngFileUpload'])
+angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 'ngFileUpload'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/dashboard', {
@@ -9,6 +9,12 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'ngFileUpload'])
 
 .controller('DashboardCtrl', ['$scope', '$http', 'Upload', '$timeout', function($scope, $http, Upload, $timeout){
 	
+    $scope.monthlyExp = [];
+    $scope.youOwe = 200;
+    $scope.youAreOwed = 400;
+    $scope.myPieData = [];
+    $scope.myBarData = [];
+    $scope.allReceipts = [];
 	$scope.uploadFiles = function(file, errFiles) {
         $scope.f = file;
         $scope.errFile = errFiles && errFiles[0];
@@ -33,6 +39,17 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'ngFileUpload'])
         }   
     }  
 	
+    // $http({
+    //     method: 'GET',
+    //     url: '/getEditableBills'
+    // }).then(function(response){
+    //     console.log("bills:"+response);
+    //     if((response.data).length>0){
+    //          $scope.allReceipts = response.data;
+    //          console.log($scope.allReceipts);
+    //     }
+    // });
+
 	$scope.allFriends = [];
 	$http({
 		method: 'GET',
@@ -50,6 +67,17 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'ngFileUpload'])
 			 $scope.user = response.data;
 	});
 	
+    $http({
+        method: 'GET',
+        url: '/monthlyExpenditure'
+    }).then(function(response){
+    	console.log(response);
+        $scope.monthlyExp = response.data;
+        console.log("monthly exp" + $scope.monthlyExp);
+        $scope.myPieData = [30,20];
+        $scope.myBarData = [$scope.monthlyExp, 100];
+    });
+
 	$scope.receiptsView = function(){
 		window.location.assign("/#!receiptsView");
 	}
@@ -61,4 +89,38 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'ngFileUpload'])
 		})
 	};
 	
+    $scope.myPieJson = {
+
+        globals: {
+            shadow: false,
+            fontFamily: "Verdana",
+            fontWeight: "100"
+        },
+        backgroundColor: "#fff",
+        tooltip: {
+            text: "%v requests"
+        },
+        series: [{
+            text: "",
+            backgroundColor: "#F1C795 #feebd2"
+        }]
+    };
+
+    $scope.myBar = {
+
+        globals: {
+            shadow: false,
+            fontFamily: "Verdana",
+            fontWeight: "100"
+        },
+        backgroundColor: "#fff",
+        tooltip: {
+            text: "Expense %v "
+        },
+        series: [{
+            text: "",
+            backgroundColor: "#FA6E6E #FA9494",
+        }]
+    };
+   
 }]);

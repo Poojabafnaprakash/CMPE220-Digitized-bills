@@ -31,4 +31,13 @@ angular.module('app.splitItem', ['ngRoute', 'ngStorage'])
 		$scope.itemsArray[$scope.currentItemIndex].splitIds = $scope.friendList;
 	}
 
+	$scope.updateDB = function(){
+		$http({
+		method: 'POST',
+		url: '/addFriends'
+	}).then(function(response){
+		console.log("in updateDB" + response);
+	});
+	}
+
 });

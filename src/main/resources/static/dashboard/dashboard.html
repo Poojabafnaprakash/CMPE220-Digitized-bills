@@ -1,122 +1,185 @@
 
 <div ng-controller="DashboardCtrl">
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <button type="button" class="btn navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">Digitized Bill</a>
-      </div>
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav navbar-right">
-          <li class="dropdown">
-            <a href="#!/dashboard" class="dropdown-toggle" data-toggle="dropdown">
-              <span class="glyphicon glyphicon-user"></span>
-              <strong>User</strong>
-              <span class="glyphicon glyphicon-chevron-down"></span>
-            </a>
-            <ul class="dropdown-menu">
-              <li>
-                <div class="navbar-login">
-                  <div class="row">
-                    <div class="col-sm-8">
-                      <p class="nav-text text-left"><strong>{{user.firstName}}</strong></p>
-                      <p class="nav-text text-left small">{{user.emailId}}</p>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="navbar-login navbar-login-session">
-                  <div class="row">
-                    <div class="col-lg-12">
-                      <p>
-                        <a href="#" class="btn btn-danger btn-block" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logut</a>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container-fluid -->
-  </nav>
+  
+	<nav class="navbar navbar-default navBarBg">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="btn navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Digitized Bill</a>
+			</div>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a href="#!/dashboard" class="dropdown-toggle" data-toggle="dropdown">
+							<span class="glyphicon glyphicon-user"></span>
+							<strong>User</strong>
+							<span class="glyphicon glyphicon-chevron-down"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<div class="navbar-login">
+									<div class="row">
+										<div class="col-sm-4">
+											<p class="text-center">
+												<img style="max-height:95px;width:130px;" class="img-circle icon-size" src="../DigitizedBill/assets/img/userimg.jpg">
+											</p>
+										</div>
+										<div class="col-sm-8">
+											<p class="nav-text text-left"><strong>{{user.firstName}}</strong></p>
+											<p class="nav-text text-left small">{{user.emailId}}</p>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<div class="navbar-login navbar-login-session">
+									<div class="row">
+										<div class="col-lg-12">
+											<p>
+												<a href="#" class="btn btn-danger btn-block" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logut</a>
+											</p>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<!-- /.navbar-collapse -->
+		</div>
+		<!-- /.container-fluid -->
+	</nav>
 
-  <div class="container-fluid text-center">
-    <div class="row content">
-      <nav-Bar></nav-Bar>
-      <!--<div class="col-sm-1 sidenav">
+	<div class="container-fluid text-center">
+		<div class="row content">
+			<nav-Bar></nav-Bar>
+			<!--<div class="col-sm-1 sidenav">
 
 
-    </div>-->
-    <div class="col-sm-8 text-left">
-      <h1>Welcome</h1>
-      <p>Upload receipts</p>
-      <button class="btn btn-block" type="file" ngf-select="uploadFiles($file, $invalidFiles)"
-      accept="image/*" ngf-max-height="1000" ngf-max-size="1MB">Upload Receipts</button>
-      <button class="btn btn-block" type="button" ng-click="receiptsView()">View Receipts</button>
-    </div>
-    <div class="col-sm-2 sidenav" ng-model="allFriends">
-      <div class="panel">
-        <h3>Friends</h3>
-        <div class="list-group">
-          <div class="list-group-item row">
-            <div class="col-sm-8" ng-repeat="friend in allFriends">
-              <p class="nav-text text-left"><strong>{{friend.firstName}}</strong></p>
-              <p class="nav-text text-left small">{{friend.emailId}}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="panel">
-        <h3>Notification</h3>
-        <div class="list-group">
-          <div class="list-group-item row">
-            <div class="col-sm-8" ng-repeat="noti in Notification">
-              <p class="nav-text text-left"><strong>{{noti.firstName}}</strong></p>
-              <p class="nav-text text-left small">{{noti.emailId}}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+		</div>-->
+
+		<div class="col-sm-8 text-left dashboardBorder dashboard-color">
+			<div class="container-fluid text-center">
+				<div class="row content">
+					<div class="welcome-dashboard">
+						Welcome
+					</div>	
+				</div></br>
+
+				<div class="row content">
+					<div class="monthly-exp">
+					Your monthly expenditure
+					</div>
+				</div></br>
+
+				<div class="row content">
+					<div class="panel panel-default">
+						<div class="panel-heading you-owe">You owe: {{youOwe}}</div>
+						<div class="panel-heading you-are-owed">You are owed: {{youAreOwed}}</div>
+					</div>
+				</div></br>
+
+				<div class="row content">
+					<div class="panel panel-default text-left">
+						<div class="panel-heading">Recent Uploads</div>
+						<div class="panel-body">
+
+							<table class="table table-condensed">
+								<thead>
+									<tr>
+										<th>Receipt Name</th>
+										<th>Split Type</th>
+										<th>Total</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr class="info" ng-repeat="receipts in allReceipts">
+										<td>John</td>
+										<td>Doe</td>
+										<td>john@example.com</td>
+									</tr>
+								</tbody>
+							</table>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="row content margin-bottom-10">
+					<div class="col-sm-6">
+						<zingchart id = "barChart" zc-values="myBarData" zc-json="myBar" zc-type="bar" zc-width="100%" style="display: block;"></zingchart>
+					</div>
+					<div class="col-sm-6">
+						<zingchart id = "pieChart" zc-values="myPieData" zc-json="myPieJson" zc-width="100%" style="display: block;"></zingchart>
+					</div>
+				</div>
+			<!-- <button class="btn btn-block" type="file" ngf-select="uploadFiles($file, $invalidFiles)"
+			accept="image/*" ngf-max-height="1000" ngf-max-size="1MB">Upload Receipts</button>
+			<button class="btn btn-block" type="button" ng-click="receiptsView()">View Receipts</button> -->
+		</div>
+	</div>
+
+	<div class="col-sm-2 sidenav" ng-model="allFriends">
+		<div class="panel">
+			<h3>Friends</h3>
+			<div class="list-group">
+				<div class="list-group-item row">
+					<div class="col-sm-8" ng-repeat="friend in allFriends">
+						<p class="nav-text text-left"><strong>{{friend.firstName}}</strong></p>
+						<p class="nav-text text-left small">{{friend.emailId}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel">
+			<h3>Notification</h3>
+			<div class="list-group">
+				<div class="list-group-item row">
+					<div class="col-sm-8" ng-repeat="noti in Notification">
+						<p class="nav-text text-left"><strong>{{noti.firstName}}</strong></p>
+						<p class="nav-text text-left small">{{noti.emailId}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 </div>
+
 
 <!-- Modal -->
 <div class="modal fade" id="myModal1" role="dialog">
-  <div class="modal-dialog">
+	<div class="modal-dialog">
 
-    <!-- Modal content-->
-    <div class="modal-content modelColor">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">×</button>
-        <h4><span class="glyphicon glyphicon-book"></span> Add Receipts</h4>
-      </div>
-      <div class="modal-body">
-        <div class="modelMargin">
-        <button id="uploadButton" style="display:block;" class="btn btn-block" type="file" ngf-select="uploadFiles($file, $invalidFiles)"
-        accept="image/*" ngf-max-height="1000" ngf-max-size="1MB">Upload Receipts</button>
-         <button style="display:none;" class="btn btn-block" id="viewReceipt" type="button" ng-click="receiptsView()" data-dismiss="modal" >View Receipts</button>
-        </div>
+		<!-- Modal content-->
+		<div class="modal-content modelColor">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h4><span class="glyphicon glyphicon-book"></span> Add Receipts</h4>
+			</div>
+			<div class="modal-body">
+				<div class="modelMargin">
+					<button id="uploadButton" style="display:block;" class="btn btn-block" type="file" ngf-select="uploadFiles($file, $invalidFiles)"
+					accept="image/*" ngf-max-height="1000" ngf-max-size="1MB">Upload Receipts</button>
+					<button style="display:none;" class="btn btn-block" id="viewReceipt" type="button" ng-click="receiptsView()" data-dismiss="modal" >View Receipts</button>
+				</div>
 
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal">
-          <span class="glyphicon glyphicon-remove"></span> Cancel
-        </button>
-      </div>
-    </div>
-  </div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal">
+					<span class="glyphicon glyphicon-remove"></span> Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
 </div>

@@ -110,8 +110,8 @@ public class OcrImageToTextConverterController {
 		bill = new Bill();
 		items = new Items();
 		itemsList = new ArrayList<>();
-		bill.setBillPath("C://Users//vsaik//Desktop//bill.png");
-		// bill.setBillPath("/Users/poojaprakashchand/Documents/Eclipse/CMPE220-Digitized-bills/src/main/resources/receiptImage/bill2.png");
+		//bill.setBillPath("C:\\Users\\vsaik\\Documents\\GitHub\\CMPE220-Digitized-bills\\src\\main\\resources\\receiptImage\\bill2.png");
+		bill.setBillPath("/Users/poojaprakashchand/Documents/Eclipse/CMPE220-Digitized-bills/src/main/resources/receiptImage/bill2.png");
 		bill.setTotal(obj.getTotal());
 		bill.setTax(obj.getTax());
 		bill.setUserId(user);

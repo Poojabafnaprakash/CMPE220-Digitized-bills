@@ -65,23 +65,28 @@ img { max-width: 100%; }
     color: #de995e;
 }
 
+.navbar-background-white {
+	background-color: #fff;
+}
 /*// User Profile Section*/
 .img-circle {
     border-radius: 50%;
 }
 .nav-text{
 	color:#000
+	color:#000;
+	color:#000;
 }
 .navbar-login-session
 {
-	background-color: #ffffff;
+	background-color: #555;
 }
 .navbar-login
 {
     width: 305px;
     padding: 10px;
     padding-bottom: 0px;
-	background-color: #ffffff;
+	background-color: #555;
 }
 .dropdown-menu{
 	background-color: #555
@@ -243,8 +248,7 @@ img { max-width: 100%; }
 }
 
 .navBarBg{
-	background-color: #3b3c3e;
-  height: 475px;
+	background-color: #fff !important; 
 }
 
 .modelColor{
@@ -286,6 +290,53 @@ img { max-width: 100%; }
 .dropdown-width{
 	width: 180px;
 }
+
+.dashboardBorder{
+	border-left: solid;
+    border-right: solid;
+    border-left-style: ridge;
+    border-right-style: ridge;
+    border-width: 1px;
+    padding-bottom: 30px;
+}
+
+.dashboard-color{
+	background-color: rgba(167, 163, 163, 0.21);
+}
+
+.welcome-dashboard{
+	font-size: 22px;
+    color: #696565;
+    float: left;
+    padding-top: 10px;
+    font-weight: 300;
+}
+
+.monthly-exp{
+	font-style: italic;
+    font-size: large;
+    color: #696565;
+    float: left;
+    padding-top: 10px;
+    font-weight: 200;
+}
+
+.you-are-owed{
+	float: left;
+    width: 50%;
+    background-color: rgba(76, 181, 0, 0.48) !important;
+    font-weight: 300;
+    font-size: initial;
+}
+
+.you-owe{
+	float: left;
+    width: 50%;
+    background-color: rgba(185, 4, 4, 0.51) !important;
+    font-weight: 300;
+    font-size: initial;
+}
+
 /***** Media queries *****/
 
 @media (min-width: 992px) and (max-width: 1199px) {}

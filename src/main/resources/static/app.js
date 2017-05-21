@@ -1,5 +1,5 @@
 
-angular.module('app', ['ngRoute','ngResource', 'xeditable', 'app.userAuth', 'app.dashboard','app.landingPage','app.receiptsView','app.receiptsViewWithOption','app.splitItem','app.splitTotal', 'app.addReceipts', 'app.createGroup'])
+angular.module('app', ['ngRoute','ngResource', 'xeditable', 'msieurtoph.ngCheckboxes', 'app.userAuth', 'app.dashboard','app.landingPage','app.receiptsView','app.receiptsViewWithOption','app.splitItem','app.splitTotal', 'app.addReceipts', 'app.createGroup'])
 .config(function($routeProvider, $locationProvider) {
   $routeProvider
   .when('/', {

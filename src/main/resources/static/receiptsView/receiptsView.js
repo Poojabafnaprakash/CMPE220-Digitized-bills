@@ -6,7 +6,7 @@ angular.module('app.receiptsView', ['ngRoute', 'ngStorage'])
     controller: 'ReceiptsViewCtrl'
   })
 }])
-.controller('ReceiptsViewCtrl', function($scope, $http){
+.controller('ReceiptsViewCtrl', function($scope, $http, $localStorage){
 	$scope.itms = {};
 	$scope.itemsArray = [];
 		  $http({
@@ -45,20 +45,36 @@ angular.module('app.receiptsView', ['ngRoute', 'ngStorage'])
       if (item.isNew) {
         item.isNew = false;
       }
-      //results.push($http.post('/saveUser', user));
-      //console.log($scope.itms);
     }
+    // send on server
+  };
+
+  $scope.saveTableFinal = function() {
+    console.log("in save table final");
+    var results = [];
     if($scope.split === 'I'){
       $scope.itms.flag = 'I'
     }
     else{
       $scope.itms.flag = 'T'
     }
+    
+    $http({
+    method: 'Post',
+    url: '/saveBillDetails',
+    data: $scope.itms
+  }).then(function(response){
+       $localStorage.receipts = response.data;
+       if($scope.split === 'I'){
+        window.location.assign("/#!splitItem");
+      }
+      else{
+        window.location.assign("/#!splitTotal");
+      }
+       
+  });
 
     // send on server
-    console.log($scope.itms);
-
-    //return $q.all(results);
   };
 
 });

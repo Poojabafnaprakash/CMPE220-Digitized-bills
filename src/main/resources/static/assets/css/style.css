@@ -260,6 +260,32 @@ img { max-width: 100%; }
 	text-align: center;
 }
 
+.btn-split{
+	background: cadetblue;
+	border-radius: 4px;
+    padding: 0px 14px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 36px;
+    color: #fff;
+    vertical-align: middle;
+    border: 0;
+    box-shadow: none;
+}
+
+.dropdown-align{
+	text-align: left;
+    margin-left: 22%;
+}
+
+.dropdown-menu.text-center{
+	text-align: center;
+}
+
+.dropdown-width{
+	width: 180px;
+}
 /***** Media queries *****/
 
 @media (min-width: 992px) and (max-width: 1199px) {}

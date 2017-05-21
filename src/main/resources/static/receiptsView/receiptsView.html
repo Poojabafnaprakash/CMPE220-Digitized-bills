@@ -136,7 +136,7 @@
                 <button type="button" ng-disabled="tableform.$waiting" ng-click="tableform.$cancel()" class="btn btn-default">Cancel</button>
               </div>
             </form>
-            <form editable-form name="splitTable" onaftersave="saveTable()" ng-hide="tableform.$visible">
+            <form editable-form name="splitTable" onaftersave="saveTableFinal()" ng-hide="tableform.$visible">
               <button type="button" class="btn btn-default col-sm-4" ng-show="!splitTable.$visible" ng-click="splitTable.$show()"> Choose Split Option
               </button>
               <div class="btn-form col-sm-5" ng-show="splitTable.$visible">

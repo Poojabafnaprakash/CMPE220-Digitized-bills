@@ -292,14 +292,14 @@ public class OcrImageToTextConverterController {
 
 	@RequestMapping("/youAreOwed")
 	public List<String> getYouAreOwed() {
-		List<String> youOwe = new ArrayList<String>();
+		List<String> youAreOwed = new ArrayList<String>();
 		List<SplitReceipt> sp = new ArrayList<SplitReceipt>();
 		sp = splitService.findOwedDetails(user);
 		for (SplitReceipt s : sp) {
-			youOwe.add("You are Owed " + s.getAmount() + "$ by "
+			youAreOwed.add("You are Owed " + s.getAmount() + "$ by "
 					+ userMap.get(s.getUserId().getId()) + ".");
 		}
-		return youOwe;
+		return youAreOwed;
 	}
 	
 

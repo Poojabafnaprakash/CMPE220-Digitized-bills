@@ -6,6 +6,10 @@ angular.module('app', ['ngRoute','ngResource', 'xeditable', 'zingchart-angularjs
 	templateUrl: './landingPage/landingPage.html',
     controller: 'LandingPageCtrl'
   }) 
+  .when('/connect/logout', {
+	templateUrl: './landingPage/landingPage.html',
+    controller: 'LandingPageCtrl'
+  }) 
   .when('/userAuth', {
     templateUrl: './user/userAuth.html',
     controller: 'UserAuthCtrl'

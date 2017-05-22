@@ -14,7 +14,9 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
     $scope.youAreOwed = 400;
     $scope.myPieData = [];
     $scope.myBarData = [];
+    $scope.myBarDataScaleX = [];
     $scope.allReceipts = [];
+    $scope.monthMap = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 	$scope.uploadFiles = function(file, errFiles) {
         $scope.f = file;
         $scope.errFile = errFiles && errFiles[0];
@@ -72,10 +74,18 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
         url: '/monthlyExpenditure'
     }).then(function(response){
     	console.log(response);
-        $scope.monthlyExp = response.data;
+        for(var i=0; i<response.data.length; i++){
+            $scope.monthlyExp.push(Math.round(response.data[i].expen));
+            $scope.myBarDataScaleX.push($scope.monthMap[response.data[i].month]);
+        }
+
+        //$scope.monthlyExp = response.data;
         console.log("monthly exp" + $scope.monthlyExp);
         $scope.myPieData = [30,20];
-        $scope.myBarData = [$scope.monthlyExp, 100];
+        //$scope.myBarData = $scope.monthlyExp;
+        $scope.myBarData = [12, 34];
+        $scope.scaleX = ["Jan", "Feb"];
+
     });
 
 	$scope.receiptsView = function(){
@@ -90,7 +100,9 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
 	};
 	
     $scope.myPieJson = {
-
+        "scale-x": {
+            "labels": $scope.myBarDataScaleX
+        },
         globals: {
             shadow: false,
             fontFamily: "Verdana",
@@ -98,7 +110,7 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
         },
         backgroundColor: "#fff",
         tooltip: {
-            text: "%v requests"
+            text: "Expense %v"
         },
         series: [{
             text: "",
@@ -107,7 +119,9 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
     };
 
     $scope.myBar = {
-
+        "scale-x": {
+            "labels": $scope.myBarDataScaleX
+        },
         globals: {
             shadow: false,
             fontFamily: "Verdana",
@@ -119,7 +133,7 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
         },
         series: [{
             text: "",
-            backgroundColor: "#FA6E6E #FA9494",
+            backgroundColor: "#FA6E6E #FA9494"
         }]
     };
    

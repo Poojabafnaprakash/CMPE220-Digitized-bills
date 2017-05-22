@@ -81,10 +81,8 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
 
         //$scope.monthlyExp = response.data;
         console.log("monthly exp" + $scope.monthlyExp);
-        $scope.myPieData = [30,20];
-        //$scope.myBarData = $scope.monthlyExp;
-        $scope.myBarData = [12, 34];
-        $scope.scaleX = ["Jan", "Feb"];
+        $scope.myPieData = $scope.monthlyExp;
+        $scope.myBarData = $scope.monthlyExp;
 
     });
 
@@ -110,7 +108,7 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
         },
         backgroundColor: "#fff",
         tooltip: {
-            text: "Expense %v"
+            text: "$ %v"
         },
         series: [{
             text: "",
@@ -129,7 +127,7 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
         },
         backgroundColor: "#fff",
         tooltip: {
-            text: "Expense %v "
+            text: "$ %v "
         },
         series: [{
             text: "",

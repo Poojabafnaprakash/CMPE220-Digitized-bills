@@ -56,10 +56,16 @@ public class Bill {
 		this.tax = tax;
 		this.total = total;
 		this.billPath = billPath;
-		userId = userId;
+		this.userId = userId;
 		this.items = items;
 		this.totOrItem = totOrItem;
 	}
+	
+	public Bill( Double total, String billName, String totOrItem) {
+		  this.total = total;
+		  this.billName = billName;
+		  this.totOrItem= totOrItem;
+		 }
 
 	public Bill(){
 		

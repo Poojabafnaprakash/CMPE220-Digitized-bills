@@ -24,6 +24,8 @@ angular.module('app.createGroup', [ 'ngRoute', 'ngStorage' ])
 					method : 'POST',
 					url : '/saveFriendsGroup',
 					data : $scope.group
+				}).then(function(){
+					window.location.assign("/#!dashboard");
 				})
 			};
 			$scope.change = function(id) {

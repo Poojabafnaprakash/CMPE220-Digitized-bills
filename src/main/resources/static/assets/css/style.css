@@ -34,7 +34,7 @@ h1, h2 {
 
 h3 {
 	font-size: 22px;
-    font-weight: 300;
+    font-weight: 200;
     color: #fff;
     line-height: 30px;
 }
@@ -86,7 +86,7 @@ img { max-width: 100%; }
     width: 305px;
     padding: 10px;
     padding-bottom: 0px;
-	background-color: #555;
+	background-color: #fff;
 }
 .dropdown-menu{
 	background-color: #555
@@ -336,6 +336,91 @@ img { max-width: 100%; }
     font-weight: 300;
     font-size: initial;
 }
+
+.notification-owe{
+    font-weight: 200;
+    font-style: bold !important;
+    font-size: initial;
+    color: #b70000;
+}
+
+.notification-owed{
+    font-weight: 200;
+    font-style: bold !important;
+    font-size: initial;
+    color: #af009f;
+}
+
+
+.col-sm-5cols{
+    position: relative;
+    min-height: 1px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+@media (min-width: 768px) {
+.col-sm-5cols {
+        width: 20%;
+        float: left;
+    }
+}
+
+
+.btn-signin{
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+  margin-top: 10px;
+  background: #de995e;
+  border: 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  color: #fff;
+  vertical-align: middle;
+  -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;
+  text-shadow: none;
+  -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none;
+  -o-transition: all .3s; -moz-transition: all .3s; -webkit-transition: all .3s; -ms-transition: all .3s; transition: all .3s;
+}
+
+.btn-signin:hover { opacity: 0.6; color: #fff; }
+
+.btn-signin:active { outline: 0; opacity: 0.6; color: #fff; -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; }
+
+.btn-signin:focus { outline: 0; opacity: 0.6; background: #de995e; color: #fff; }
+
+.btn-signin:active:focus, .btn-signin.active:focus { outline: 0; opacity: 0.6; background: #de995e; color: #fff; }
+
+.landing-container{ margin: 10px 10px 10px 10px;}
+
+.btn-get-started{
+	margin: 25px 25px 25px 25px !important;
+	height: auto !important;
+	width:260px !important;
+
+
+}
+
+.landing-container h1{
+    margin-top: 10px;
+    font-size: 39px;
+    font-weight: 100;
+    color: #fff;
+    line-height: 100px;
+    text-align: center
+}
+.landing-container h2{
+    margin-top: 10px;
+    font-size: 39px;
+    font-weight: 100;
+    color: #fff;
+    line-height: 50px;
+    text-align: left
+}
+
 
 /***** Media queries *****/
 

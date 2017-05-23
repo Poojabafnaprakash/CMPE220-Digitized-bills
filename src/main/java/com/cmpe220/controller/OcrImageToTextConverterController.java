@@ -110,6 +110,7 @@ public class OcrImageToTextConverterController {
 		bill = new Bill();
 		items = new Items();
 		itemsList = new ArrayList<>();
+		
 		//bill.setBillPath("C:\\Users\\vsaik\\Documents\\GitHub\\CMPE220-Digitized-bills\\src\\main\\resources\\receiptImage\\bill2.png");
 		bill.setBillPath("/Users/poojaprakashchand/Documents/Eclipse/CMPE220-Digitized-bills/src/main/resources/receiptImage/bill2.png");
 		bill.setTotal(obj.getTotal());
@@ -117,7 +118,9 @@ public class OcrImageToTextConverterController {
 		bill.setUserId(user);
 		bill.setBillName(obj.getBillName());
 		bill.setTotOrItem(obj.getFlag());
+		System.out.println(obj.getTotal());
 		bill = billservice.addBill(bill);
+		System.out.println(obj.getItems().size());
 		for (int i = 0; i < obj.getItems().size(); i++) {
 			obj.getItems().get(i).setBillId(bill);
 			items = itemsService.addItems(obj.getItems().get(i));
@@ -148,6 +151,7 @@ public class OcrImageToTextConverterController {
 		userMap.put(user.getId(), user.getFirstName());
 		return names;
 	}
+	
 
 	@RequestMapping("/user")
 	public User getUser() {
@@ -155,7 +159,7 @@ public class OcrImageToTextConverterController {
 	}
 
 	@PostMapping("/addFriends")
-	public String addFriends(@RequestBody JsonRequestWrapper object) {
+	public void addFriends(@RequestBody JsonRequestWrapper object) {
 		int splitBy = 0;
 		if (object.getFlag().equals("T")) {
 			splitBy = object.getSplitIds().size();
@@ -167,7 +171,7 @@ public class OcrImageToTextConverterController {
 				splitReceipt.setBillId(bill);
 				splitReceipt.setDateCreated(new java.sql.Date(new Date()
 						.getTime()));
-				splitReceipt.setPaidBy(object.getPaidBy());
+				splitReceipt.setPaidBy(user);
 				splitReceipt.setUserId(object.getSplitIds().get(index));
 				splitReceipt = splitService.addItems(splitReceipt);
 				index--;
@@ -187,8 +191,7 @@ public class OcrImageToTextConverterController {
 						splitReceipt.setBillId(bill);
 						splitReceipt.setDateCreated(new java.sql.Date(
 								new Date().getTime()));
-						splitReceipt.setPaidBy(object.getItems().get(index)
-								.getPaidBy());
+						splitReceipt.setPaidBy(user);
 						splitReceipt.setUserId(object.getItems().get(index)
 								.getSplitIds().get(splitIndex));
 						splitReceipt.setItemId(object.getItems().get(index));
@@ -201,14 +204,28 @@ public class OcrImageToTextConverterController {
 			}
 		}
 		this.obj = object;
-		return "redirect:/#!/dashboard";
+		
 	}
 
 	@RequestMapping("/getEditableBills")
 	public List<Bill> getBills() {
-		bills = new ArrayList<>();
-		bills = billservice.findBills(user);
+		bills = new ArrayList<Bill>();
+		
+		bills.add(new Bill(400.0,"Walmart","Total"));
+		bills.add(new Bill(200.0,"Target","Total"));
+		bills.add(new Bill(300.0,"Bargain","Item"));
+//		
+//		bills = new ArrayList<Bill>();
+//		//bills = 
+//		//bills = (ArrayList<Bill>) billservice.findBills(user);
+//		Iterable<Bill> iter = billservice.getBills();
+//		for (Bill item : iter) {
+//			bills.add(item);
+//	    }
+//		//bills = billservice.getBills();
 		return bills;
+		
+		
 	}
 
 	@RequestMapping("/createGroup")
@@ -219,8 +236,30 @@ public class OcrImageToTextConverterController {
 		return this.groups;
 	}
 
+	public void sendNotification(){
+		  //user = new ArrayList<User>();
+		Integer expen = 0;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+		try {
+			// user = userService.getAllUsers();
+			java.util.Date date1 = format.parse("2017/04/01");
+			java.util.Date date2 = format.parse("2017/04/30");
+			// for (User u : user) {
+			expen = splitService.findMonthlyExpen(user, new java.sql.Date(date1.getTime()),
+					new java.sql.Date(date2.getTime()));
+			if (expen != null) {
+				NotificationEmail.emailRecommendTrigger(user.getFirstName(), expen.toString(), user.getEmailId());
+			}
+
+			// }
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@RequestMapping("/saveFriendsGroup")
-	public String saveFriendsGroup(@RequestBody Groups groups) {
+	public void saveFriendsGroup(@RequestBody Groups groups) {
 		UserGroups us = null;
 		this.groups = groupService.createGroup(groups);
 		for (User u : groups.getUserIds()) {
@@ -231,7 +270,7 @@ public class OcrImageToTextConverterController {
 				userGroupService.saveFriends(us);
 			}
 		}
-		return "redirect:/#!/dashboard";
+		 
 	}
 
 	@RequestMapping("/viewGroups")
@@ -242,31 +281,16 @@ public class OcrImageToTextConverterController {
 		return groups;
 	}
 
-	// @RequestMapping("/getItemsFromReceipt")
-	// public List<Items> getItemsFromReceipt() {
-	// List<Items> itm = getTextFromReceiptService.getItemsFromReceipt();
-	// return itm;
-	// }
-	//
-	// @RequestMapping("/getTotalFromReceipt")
-	// public Double getTotalFromReceipt() {
-	// Double total = null;
-	// total = getTextFromReceiptService.getTotalFromReceipt();
-	// return total;
-	// }
-	//
-	// @RequestMapping("/getTaxFromReceipt")
-	// public Double getTaxFromReceipt() {
-	// Double total = null;
-	// total = getTextFromReceiptService.getTaxFromReceipt();
-	// return total;
-	// }
+	
 
 	@RequestMapping("/monthlyExpenditure")
 	public List<MonthlyExpen> getmonthlyExpenditure() {
+		sendNotification();
 		List<MonthlyExpen> expens = new ArrayList<MonthlyExpen>();
 		MonthlyExpen expen = new MonthlyExpen();
 		String[] expenArray = splitService.findMonthlyExpenYear(user, "2017");
+		System.out.println(expenArray.length);
+		System.out.println(expenArray);
 		for (int i = 0; i < expenArray.length; i++) {
 			expen = new MonthlyExpen();
 			String[] arr = expenArray[i].split(",");
@@ -304,19 +328,20 @@ public class OcrImageToTextConverterController {
 	
 
 	@RequestMapping("/totalYouOwe")
-	public String getTotalYouOwe() {
-		String youOwe = null;
+	public int getTotalYouOwe() {
+		
+		
 		int amount = splitService.findTotalYouOwe(user);
-			youOwe ="Total amount you owe is "+amount+"$.";
-		return youOwe;
+		
+		return amount;
 	}
 	
 
 	@RequestMapping("/totalYouAreOwed")
-	public String getTotalYouAreOwed() {
-		String youOwe = null;
+	public int getTotalYouAreOwed() {
+		
 		int amount = splitService.findTotalYouAreOwed(user);
-		youOwe ="Total amount you are owed is "+amount+"$.";
-		return youOwe;
+		
+		return amount;
 	}
 }

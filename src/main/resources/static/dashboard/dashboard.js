@@ -10,12 +10,12 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
 .controller('DashboardCtrl', ['$scope', '$http', 'Upload', '$timeout', function($scope, $http, Upload, $timeout){
 	
     $scope.monthlyExp = [];
-    $scope.youOwe = 200;
-    $scope.youAreOwed = 400;
     $scope.myPieData = [];
     $scope.myBarData = [];
     $scope.myBarDataScaleX = [];
     $scope.allReceipts = [];
+    $scope.totalYouOwe = {};
+    $scope.bills = [];
     $scope.monthMap = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 	$scope.uploadFiles = function(file, errFiles) {
         $scope.f = file;
@@ -41,16 +41,6 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
         }   
     }  
 	
-    // $http({
-    //     method: 'GET',
-    //     url: '/getEditableBills'
-    // }).then(function(response){
-    //     console.log("bills:"+response);
-    //     if((response.data).length>0){
-    //          $scope.allReceipts = response.data;
-    //          console.log($scope.allReceipts);
-    //     }
-    // });
 
 	$scope.allFriends = [];
 	$http({
@@ -61,6 +51,14 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
 			 $scope.allFriends = response.data;
         }
 	});
+
+   $http({
+       method: 'GET',
+       url: '/getEditableBills'
+   }).then(function(response){
+        $scope.bills = response.data;
+       //console.log("bills" + response);
+   });
 	
 	$http({
 		method: 'GET',
@@ -85,6 +83,42 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
         $scope.myBarData = $scope.monthlyExp;
 
     });
+
+    $http({
+        method: 'GET',
+        url: '/totalYouOwe'
+    }).then(function(response){
+        console.log(response);
+        $scope.totalYouOwe = JSON.parse(response.data);
+    });
+ 
+
+     $http({
+        method: 'GET',
+        url: '/totalYouAreOwed'
+     }).then(function(response){
+        $scope.totalYouAreOwed = response.data;
+     });
+ 
+     $scope.youAreOwed = [];
+     $http({
+        method: 'GET',
+        url: '/youAreOwed'
+     }).then(function(response){
+        if((response.data).length>0){
+            $scope.youAreOwed = response.data;
+        }
+     });
+ 
+ $scope.youOwe = [];
+ $http({
+  method: 'GET',
+  url: '/youOwe'
+ }).then(function(response){
+  if((response.data).length>0){
+    $scope.youOwe = response.data;
+        }
+ });
 
 	$scope.receiptsView = function(){
 		window.location.assign("/#!receiptsView");

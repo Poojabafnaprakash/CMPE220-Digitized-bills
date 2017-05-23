@@ -1,5 +1,6 @@
 package com.cmpe220.model;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -12,9 +13,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="bill")
-public class Bill {
+public class Bill implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="id")
@@ -34,48 +42,34 @@ public class Bill {
 	
 	@Column(name="flag")
 	String totOrItem;
-	
-	public String getBillPath() {
-		return billPath;
-	}
 
-	public void setBillPath(String billPath) {
-		this.billPath = billPath;
-	}
-
-	@OneToOne
+	@OneToOne 
 	@JoinColumn(name="user_id")
 	User userId;
 	
-	@OneToMany(mappedBy="billId")
+	@OneToMany(mappedBy="billId") @JsonIgnore
 	private Set<Items> items;
-	
-	public Bill(int id, Double tax, Double total, String billPath, User userId, Set<Items> items, String totOrItem) {
-		super();
-		this.id = id;
-		this.tax = tax;
-		this.total = total;
-		this.billPath = billPath;
-		this.userId = userId;
-		this.items = items;
-		this.totOrItem = totOrItem;
-	}
 	
 	public Bill( Double total, String billName, String totOrItem) {
 		  this.total = total;
 		  this.billName = billName;
 		  this.totOrItem= totOrItem;
 		 }
+	
+	
 
-	public Bill(){
-		
+	public Bill() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
-	public int getBillId() {
+
+
+	public int getId() {
 		return id;
 	}
 
-	public void setBillId(int id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -95,20 +89,20 @@ public class Bill {
 		this.total = total;
 	}
 
-	public Set<Items> getItems() {
-		return items;
+	public String getBillPath() {
+		return billPath;
 	}
 
-	public void setItems(Set<Items> items) {
-		this.items = items;
+	public void setBillPath(String billPath) {
+		this.billPath = billPath;
 	}
 
-	public User getUserId() {
-		return userId;
+	public String getBillName() {
+		return billName;
 	}
 
-	public void setUserId(User userId) {
-		this.userId = userId;
+	public void setBillName(String billName) {
+		this.billName = billName;
 	}
 
 	public String getTotOrItem() {
@@ -119,20 +113,35 @@ public class Bill {
 		this.totOrItem = totOrItem;
 	}
 
-	public int getId() {
-		return id;
+	public User getUserId() {
+		return userId;
 	}
 
-	public void setId(int id) {
+	public void setUserId(User userId) {
+		this.userId = userId;
+	}
+
+	public Set<Items> getItems() {
+		return items;
+	}
+
+	public void setItems(Set<Items> items) {
+		this.items = items;
+	}
+
+	public Bill(int id, Double tax, Double total, String billPath, String billName, String totOrItem, User userId,
+			Set<Items> items) {
+		super();
 		this.id = id;
-	}
-
-	public String getBillName() {
-		return billName;
-	}
-
-	public void setBillName(String billName) {
+		this.tax = tax;
+		this.total = total;
+		this.billPath = billPath;
 		this.billName = billName;
+		this.totOrItem = totOrItem;
+		this.userId = userId;
+		this.items = items;
 	}
+
+	
 
 }

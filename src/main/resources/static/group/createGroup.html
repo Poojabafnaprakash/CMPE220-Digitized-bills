@@ -68,27 +68,38 @@
 	<nav class="navbar navbar-default">
 		<form name="groupForm" ng-submit="saveGroup()">
 			<div>
-				<label>Group Name<input type="text" name="input"
+				<label>Group Name<input type="text" name="input" placeholder="Enter Group Name" 
 					ng-model="group.groupName" required ng-trim="false">
 				</label>
 			</div>
 			<div class="container-fluid">
 				<div ng-model="allFriends">
-					<div class="panel">
-						<h5>Select Friends</h5>
-						<div class="list-group">
-							<div class="list-group-item row">
-								<div class="col-sm-8" ng-repeat="friend in allFriends">
-									<p class="nav-text text-left">
-										<input type="checkbox" value="{{friend.firstName}}" ng-click="change($index)">{{friend.firstName}}<br>
-										<br>
-									</p>
-									<p class="nav-text text-left small">{{friend.emailId}}</p>
+					<div class="panel panel-primary">
+            <div class="panel-heading">
+  						<h5>Select Friends</h5>
+            </div>
+            <div class="panel-body">
+              <div class="col-sm-8" ng-repeat="friend in allFriends">
+                <p class="nav-text text-left">
+                  <input type="checkbox" value="{{friend.firstName}}" ng-click="change($index)" style="margin-right: 15px;"">{{friend.firstName}}
+                </p>
+                <p class="nav-text text-left small" style="padding-left: 29px;">{{friend.emailId}}</p>
+                </div>
+            </div>
+            <!-- <div class="panel-body">
+  						<div class="list-group">
+  							<div class="list-group-item row">
+  								<div class="col-sm-8" ng-repeat="friend in allFriends">
+  									<p class="nav-text text-left">
+  										<input type="checkbox" value="{{friend.firstName}}" ng-click="change($index)">{{friend.firstName}}
+  									</p>
+  									<p class="nav-text text-left small">{{friend.emailId}}</p>
 
-								</div>
-							</div>
-						</div>
-					</div>
+  								</div>
+  							</div>
+  						</div>
+  					</div> -->
+          </div>
 				</div>
 			</div>
 			<div>

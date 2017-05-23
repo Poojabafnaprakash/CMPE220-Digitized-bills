@@ -141,19 +141,34 @@
 			</div>
 		</div>
 		<div class="panel">
-			<h3>Notification</h3>
+			<h3>Expense Details</h3>
 			<div class="list-group">
-    		<div class="list-group-item row">
-     			
-      			<div ng-repeat="noti in youAreOwed">
-      				<div class=" notification-owed nav-text text-left small">{{noti}}</div>
-     				</div>
-     			<div ng-repeat="noti in youOwe">
-      			<div class=" notification-owe nav-text text-left small">{{noti}}</div>
-     			</div>
-     
-    </div>
-   </div>
+	    		<div class="list-group-item row">
+	      			<div ng-repeat="noti in youAreOwed">
+	      				<div class=" notification-owed nav-text text-left small">{{noti}}
+	      				</div>
+	     			</div>
+	     			<div ng-repeat="noti in youOwe">
+	      				<div class=" notification-owe nav-text text-left small">{{noti}}
+	      				</div>
+	     			</div>
+	    		</div>
+	    		</br>
+	    		<button class="btn-split btn-primary" type="button" ng-click="sendNotification()">Email Expense
+	    		</button>
+   			</div>
+		</div>
+
+		<div class="panel">
+			<h3>Your Groups</h3>
+			<div class="list-group">
+				<div class="list-group-item row">
+					<div class="col-sm-12" ng-repeat="group in allGroups">
+						<div class="notification-owed nav-text text-left small" style="color:cadetblue; font-weight: 400">{{group}}
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

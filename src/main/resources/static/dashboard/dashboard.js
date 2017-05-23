@@ -16,6 +16,7 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
     $scope.allReceipts = [];
     $scope.totalYouOwe = {};
     $scope.bills = [];
+    $scope.allGroups = [];
     $scope.monthMap = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 	$scope.uploadFiles = function(file, errFiles) {
         $scope.f = file;
@@ -57,7 +58,8 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
        url: '/getEditableBills'
    }).then(function(response){
         $scope.bills = response.data;
-       //console.log("bills" + response);
+        console.log("bills" + response);
+        console.log("scope bills" + $scope.bills);
    });
 	
 	$http({
@@ -91,6 +93,25 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
         console.log(response);
         $scope.totalYouOwe = JSON.parse(response.data);
     });
+
+    $http({
+        method: 'GET',
+        url: '/viewGroups'
+    }).then(function(response){
+        console.log(response.data);
+        for(var i=0; i<response.data.length; i++){
+           $scope.allGroups.push(response.data[i].groupName); 
+        }
+    });
+
+
+
+    $scope.sendNotification = function() {
+        $http({
+            method : 'GET',
+            url : '/sendNotification'
+        })
+    };
  
 
      $http({

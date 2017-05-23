@@ -3,9 +3,11 @@ package com.cmpe220.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,6 +27,7 @@ import com.cmpe220.model.Items;
 import com.cmpe220.model.SplitReceipt;
 import com.cmpe220.model.User;
 import com.cmpe220.model.UserGroups;
+import com.cmpe220.object.AllBills;
 import com.cmpe220.object.JsonRequestWrapper;
 import com.cmpe220.object.MonthlyExpen;
 import com.cmpe220.ocr.NotificationEmail;
@@ -69,6 +72,8 @@ public class OcrImageToTextConverterController {
 	public Groups groups;
 	public List<Bill> bills;
 	public List<Friend> friendsList;
+	//public List<AllBills> allBills;
+	public HashMap<AllBills, AllBills> allBills;
 
 	public Items items;
 	public SplitReceipt splitReceipt;
@@ -209,22 +214,17 @@ public class OcrImageToTextConverterController {
 
 	@RequestMapping("/getEditableBills")
 	public List<Bill> getBills() {
-		bills = new ArrayList<Bill>();
-		
-		bills.add(new Bill(400.0,"Walmart","Total"));
-		bills.add(new Bill(200.0,"Target","Total"));
-		bills.add(new Bill(300.0,"Bargain","Item"));
-//		
-//		bills = new ArrayList<Bill>();
-//		//bills = 
-//		//bills = (ArrayList<Bill>) billservice.findBills(user);
-//		Iterable<Bill> iter = billservice.getBills();
-//		for (Bill item : iter) {
-//			bills.add(item);
-//	    }
-//		//bills = billservice.getBills();
+		bills = new ArrayList<Bill>();		
+		bills = billservice.findBills(user);
+		for(int i=0; i<bills.size(); i++){
+			if(bills.get(i).getTotOrItem().equals("I")){
+				bills.get(i).setTotOrItem("Item");
+			}
+			else{
+				bills.get(i).setTotOrItem("Total");
+			}
+		}
 		return bills;
-		
 		
 	}
 
@@ -235,25 +235,25 @@ public class OcrImageToTextConverterController {
 		this.groups.setUserIds(names);
 		return this.groups;
 	}
-
-	public void sendNotification(){
-		  //user = new ArrayList<User>();
+	
+	
+	@RequestMapping("/sendNotification")
+	public void sendNotification() {
 		Integer expen = 0;
-		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+		
 		try {
-			// user = userService.getAllUsers();
-			java.util.Date date1 = format.parse("2017/04/01");
-			java.util.Date date2 = format.parse("2017/04/30");
-			// for (User u : user) {
-			expen = splitService.findMonthlyExpen(user, new java.sql.Date(date1.getTime()),
-					new java.sql.Date(date2.getTime()));
+			java.util.Date date= new Date();
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date);
+			int month = cal.get(Calendar.MONTH) + 1;
+			System.out.println(month);
+			expen = splitService.findMonthlyExpen(user,month);
 			if (expen != null) {
-				NotificationEmail.emailRecommendTrigger(user.getFirstName(), expen.toString(), user.getEmailId());
+				NotificationEmail.emailRecommendTrigger(user.getFirstName(),
+						expen.toString(), user.getEmailId(),month);
 			}
 
-			// }
-
-		} catch (ParseException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -285,7 +285,7 @@ public class OcrImageToTextConverterController {
 
 	@RequestMapping("/monthlyExpenditure")
 	public List<MonthlyExpen> getmonthlyExpenditure() {
-		sendNotification();
+		
 		List<MonthlyExpen> expens = new ArrayList<MonthlyExpen>();
 		MonthlyExpen expen = new MonthlyExpen();
 		String[] expenArray = splitService.findMonthlyExpenYear(user, "2017");
@@ -305,43 +305,70 @@ public class OcrImageToTextConverterController {
 	@RequestMapping("/youOwe")
 	public List<String> getYouOwe() {
 		List<String> youOwe = new ArrayList<String>();
-		List<SplitReceipt> sp = new ArrayList<SplitReceipt>();
-		sp = splitService.findOweDetails(user);
-		for (SplitReceipt s : sp) {
-			youOwe.add("You owe " + userMap.get(s.getPaidBy().getId()) + " "
-					+ s.getAmount() + "$.");
+		StringBuffer sb;
+		int count =0;
+		Object amount =null;
+		List<Map<Double, User>> sp = splitService.findOweDetails(user);
+		for (int i = 0; i < sp.size(); i++) {
+			sb = new StringBuffer();
+			sb.append("You owe ");
+			count = 0;
+			for (Map.Entry<Double, User> entry : sp.get(i).entrySet()) {
+				count++;
+				if (count == 1) {
+					amount = entry.getValue();
+				} else if (count == 2) {
+					sb.append(userMap.get(entry.getValue().getId()));
+					sb.append(" ");
+					sb.append(amount + "$.");
+					youOwe.add(sb.toString());
+				}
+			}
 		}
+
 		return youOwe;
 	}
 
 	@RequestMapping("/youAreOwed")
 	public List<String> getYouAreOwed() {
 		List<String> youAreOwed = new ArrayList<String>();
-		List<SplitReceipt> sp = new ArrayList<SplitReceipt>();
-		sp = splitService.findOwedDetails(user);
-		for (SplitReceipt s : sp) {
-			youAreOwed.add("You are Owed " + s.getAmount() + "$ by "
-					+ userMap.get(s.getUserId().getId()) + ".");
+		List<Map<Double, User>> sp = splitService.findOwedDetails(user);
+		System.out.println(sp.size());
+		StringBuffer sb;
+		int count = 0;
+		for (int i = 0; i < sp.size(); i++) {
+			sb = new StringBuffer();
+			sb.append("You are Owed ");
+			count = 0;
+			for (Map.Entry<Double, User> entry : sp.get(i).entrySet()) {
+				count++;
+				if (count == 1) {
+					sb.append(entry.getValue());
+					sb.append("$ by ");
+				} else if (count == 2) {
+					sb.append(userMap.get(entry.getValue().getId()));
+					youAreOwed.add(sb.toString());
+				}
+			}
 		}
 		return youAreOwed;
 	}
 	
 
 	@RequestMapping("/totalYouOwe")
-	public int getTotalYouOwe() {
+	public Double getTotalYouOwe() {
 		
+		Double amount = splitService.findTotalYouOwe(user);
 		
-		int amount = splitService.findTotalYouOwe(user);
-		
-		return amount;
+		return Double.parseDouble(String.format("%.2f", amount));
 	}
 	
 
 	@RequestMapping("/totalYouAreOwed")
-	public int getTotalYouAreOwed() {
+	public Double getTotalYouAreOwed() {
 		
-		int amount = splitService.findTotalYouAreOwed(user);
+		Double amount = splitService.findTotalYouAreOwed(user);
 		
-		return amount;
+		return Double.parseDouble(String.format("%.2f", amount));
 	}
 }

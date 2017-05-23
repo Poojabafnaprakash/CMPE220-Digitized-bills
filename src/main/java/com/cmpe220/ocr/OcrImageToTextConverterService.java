@@ -64,7 +64,7 @@ public class OcrImageToTextConverterService {
 		//obj.setTax(4.3);
 		obj.setTotal(serviceObj.getTotalFromReceipt(text));
 		//obj.setTotal(177.5);
-		obj.setBillName(name+"-"+new Date().toString());
+		obj.setBillName("Bill"+"-"+new Date().toString());
 		obj.setItems(serviceObj.getItemsFromReceipt(text));
 		return obj;
 	}

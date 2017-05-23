@@ -38,6 +38,7 @@ angular.module('app.splitItem', ['ngRoute', 'ngStorage'])
 		console.log("In frnd " + $scope.currentItemIndex);
 		console.log($scope.itemsArray);
 		$scope.itemsArray[$scope.currentItemIndex].splitIds = $scope.friendList;
+		$scope.friendList = [];
 	}
 
 	$scope.updateDB = function(){

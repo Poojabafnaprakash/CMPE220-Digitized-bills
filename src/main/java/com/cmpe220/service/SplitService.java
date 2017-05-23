@@ -2,6 +2,7 @@ package com.cmpe220.service;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,8 @@ public class SplitService {
 		return splitRepository.save(items);
 	}
 
-	public int findMonthlyExpen(User user, Date date1, Date date2) {
-		return splitRepository.findMonthlyExpen(user, date1, date2);
+	public int findMonthlyExpen(User user, int month) {
+		return splitRepository.findMonthlyExpen(user, month);
 	}
 
 	public String[] findMonthlyExpenYear(User user, String year) {
@@ -29,19 +30,19 @@ public class SplitService {
 	}
 
 	
-	public List<SplitReceipt> findOweDetails(User user) {
+	public List<Map<Double,User>> findOweDetails(User user) {
 		return splitRepository.findOweDetails(user);
 	}
 
-	public List<SplitReceipt> findOwedDetails(User user) {
+	public List<Map<Double,User>> findOwedDetails(User user) {
 		return splitRepository.findOwedDetails(user);
 	}
 
-	public Integer findTotalYouOwe(User user) {
+	public Double findTotalYouOwe(User user) {
 		return splitRepository.findTotalYouOwe(user);
 	}
 
-	public Integer findTotalYouAreOwed(User user) {
+	public Double findTotalYouAreOwed(User user) {
 		return splitRepository.findTotalYouAreOwed(user);
 	}
 }

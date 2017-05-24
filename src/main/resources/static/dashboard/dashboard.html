@@ -93,7 +93,7 @@
 						<div class="panel-heading">Recent Uploads</div>
 						<div class="panel-body">
 
-							<table class="table table-condensed">
+							<table class="table table-condensed" id="billtable">
 								<thead>
 									<tr>
 										<th>Receipt Name</th>
@@ -102,6 +102,7 @@
 									</tr>
 								</thead>
 								<tbody>
+								{{NoBill}}
 									<tr class="info" ng-repeat="receipts in bills">
 										<td>{{receipts.billName}}</td>
 										<td>{{receipts.total}}</td>
@@ -132,18 +133,21 @@
 		<div class="panel">
 			<h3>Friends</h3>
 			<div class="list-group">
-				<div class="list-group-item row">
+				<div class="list-group-item row"> {{noFrnds}}
 					<div class="col-sm-8" ng-repeat="friend in allFriends">
 						<div class="nav-text text-left small" style="color:cadetblue"><strong>{{friend.firstName}}</strong>
 						{{friend.emailId}}</div>
 					</div>
 				</div>
+				</br>
+				<button class="btn-split btn-primary" type="button" ng-click="addNewFriends()" data-toggle="modal" data-target="#addNewFrndsModel">Add New Friend
+	    		</button>
 			</div>
 		</div>
 		<div class="panel">
-			<h3>Expense Details</h3>
+			<h4>Expense Details</h4>
 			<div class="list-group">
-	    		<div class="list-group-item row">
+	    		<div class="list-group-item row"> {{noExpense}}
 	      			<div ng-repeat="noti in youAreOwed">
 	      				<div class=" notification-owed nav-text text-left small">{{noti}}
 	      				</div>
@@ -162,7 +166,7 @@
 		<div class="panel">
 			<h3>Your Groups</h3>
 			<div class="list-group">
-				<div class="list-group-item row">
+				<div class="list-group-item row"> {{nogroups}}
 					<div class="col-sm-12" ng-repeat="group in allGroups">
 						<div class="notification-owed nav-text text-left small" style="color:cadetblue; font-weight: 400">{{group}}
 						</div>
@@ -201,4 +205,31 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="addNewFrndsModel" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content modelColor">
+      <div class="modal-header">
+        <h4><span class="glyphicon glyphicon-user"></span>Choose friends</h4>
+      </div>
+      <div class="modal-body">
+        <div class="modelMargin">{{noFriendsDisplay}}
+        <div class="checkbox" ng-repeat="friend in notFrnds" mt-to="friendList">
+          <label><input type="checkbox" mt-checkbox="friend">{{friend.firstName}}</label>
+        </div>
+        <button class="btn-split btn-primary" id="addFrndButton" ng-click="addNotfrnd()" data-dismiss="modal">Add friends</button>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal">
+          <span class="glyphicon glyphicon-remove"></span> Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>

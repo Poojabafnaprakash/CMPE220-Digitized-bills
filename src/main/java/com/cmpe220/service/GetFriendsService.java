@@ -30,8 +30,17 @@ public class GetFriendsService {
 		
 	}
 	
+	public List<Friend> findNotFriends(User userId) {
+		return getFriendsRepository.findNotFriends(userId);
+	}
+	
 	public List<Friend> findFriends(User user) {
 		return getFriendsRepository.findFriends(user);
+	}
+	
+	public Friend addFriend(Friend friend) {
+		return getFriendsRepository.save(friend);
+
 	}
 
 }

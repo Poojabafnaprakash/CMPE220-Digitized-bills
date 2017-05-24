@@ -17,4 +17,7 @@ import com.cmpe220.model.User;
 public interface GetFriendsRepository extends CrudRepository<Friend, Integer> {
 	 @Query("SELECT f FROM Friend f where f.userId=:userId")
 	  public List<Friend> findFriends(@Param("userId") User userId);
+	 
+	 @Query("SELECT f FROM Friend f where f.userId != :userId")
+	  public List<Friend> findNotFriends(@Param("userId") User userId);
 }

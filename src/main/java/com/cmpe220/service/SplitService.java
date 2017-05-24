@@ -21,7 +21,7 @@ public class SplitService {
 		return splitRepository.save(items);
 	}
 
-	public int findMonthlyExpen(User user, int month) {
+	public Double findMonthlyExpen(User user, int month) {
 		return splitRepository.findMonthlyExpen(user, month);
 	}
 

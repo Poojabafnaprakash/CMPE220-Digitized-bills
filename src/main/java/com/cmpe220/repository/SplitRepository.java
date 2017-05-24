@@ -16,7 +16,7 @@ import com.cmpe220.model.User;
 public interface SplitRepository extends CrudRepository<SplitReceipt, Integer> {
 
 	@Query("SELECT COALESCE(SUM(b.amount),0) FROM SplitReceipt b WHERE b.userId = :userId and MONTH(dateCreated)= :month")
-	public Integer findMonthlyExpen(@Param("userId") User userId,@Param("month") int month);
+	public Double findMonthlyExpen(@Param("userId") User userId,@Param("month") int month);
 
 	@Query("SELECT COALESCE(SUM(b.amount),0),MONTH(dateCreated) FROM SplitReceipt b WHERE  b.userId = :userId and YEAR(dateCreated) ='2017' GROUP BY MONTH(dateCreated)")
 	public String[] findMonthlyExpenYear(@Param("userId") User userId);

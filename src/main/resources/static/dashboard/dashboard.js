@@ -50,17 +50,60 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
 	}).then(function(response){
 		if((response.data).length>0){
 			 $scope.allFriends = response.data;
+        } else{
+            $scope.noFrnds = "No friends."
         }
 	});
+
+    $scope.notFrnds = [];
+
+    $scope.addNewFriends = function(){
+        $http({
+            method: 'GET',
+            url: '/notFriends'
+        }).then(function(response){
+            if((response.data).length>0){
+                $scope.notFrnds = [];
+                $scope.notFrnds = response.data;
+                var x = document.getElementById('addFrndButton');
+                x.style.display = 'block';
+            } else{
+                var x = document.getElementById('addFrndButton');
+                x.style.display = 'none';
+                $scope.noFriendsDisplay = "No users to display";
+            }
+        });
+    }
+
+    $scope.friendList = [];
+
+    $scope.addNotfrnd = function(){
+        $http({
+                    method : 'POST',
+                    url : '/addNotFriends',
+                    data : $scope.friendList
+                }).then(function(){
+                    window.location.assign("/#!dashboard");
+                });
+    }
 
    $http({
        method: 'GET',
        url: '/getEditableBills'
    }).then(function(response){
-        $scope.bills = response.data;
-        console.log("bills" + response);
+        
+        if(response.data.length==0){
+            $scope.NoBill = "No Receipts";
+            var x = document.getElementById('billtable');
+            x.style.display = 'none';
+        }
+        else{
+            $scope.bills = response.data;
+        }
         console.log("scope bills" + $scope.bills);
    });
+
+
 	
 	$http({
 		method: 'GET',
@@ -76,7 +119,8 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
     	console.log(response);
         for(var i=0; i<response.data.length; i++){
             $scope.monthlyExp.push(Math.round(response.data[i].expen));
-            $scope.myBarDataScaleX.push($scope.monthMap[response.data[i].month]);
+            $scope.myBarDataScaleX.push($scope.monthMap[response.data[i].month-1]);
+            console.log($scope.monthMap[response.data[i].month-1]);
         }
 
         //$scope.monthlyExp = response.data;
@@ -101,6 +145,9 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
         console.log(response.data);
         for(var i=0; i<response.data.length; i++){
            $scope.allGroups.push(response.data[i].groupName); 
+        }
+        if(response.data.length == 0){
+            $scope.nogroups = "No Groups";
         }
     });
 
@@ -128,6 +175,8 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
      }).then(function(response){
         if((response.data).length>0){
             $scope.youAreOwed = response.data;
+        } else{
+            $scope.noExpense = "None owes you.";
         }
      });
  
@@ -138,7 +187,9 @@ angular.module('app.dashboard', ['ngRoute', 'ngStorage', 'zingchart-angularjs', 
  }).then(function(response){
   if((response.data).length>0){
     $scope.youOwe = response.data;
-        }
+    } else{
+        $scope.noExpense = "You do not owe.";
+    }
  });
 
 	$scope.receiptsView = function(){

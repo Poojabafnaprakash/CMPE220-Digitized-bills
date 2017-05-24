@@ -84,6 +84,8 @@ public class OcrImageToTextConverterController {
 	public User user;
 	public List<User> names = new ArrayList<>();
 	JsonRequestWrapper obj = new JsonRequestWrapper();
+	
+	public List<User> notFriends = new ArrayList<>();
 
 	@CrossOrigin(origins = "*")
 	@PostMapping("/getReceiptDetails")
@@ -142,18 +144,23 @@ public class OcrImageToTextConverterController {
 
 	@RequestMapping("/getUserFriends")
 	public List<User> getFriends() {
-		friendsList = new ArrayList<>();
-		friendsList = getFriendsService.findFriends(user);
-		List<Integer> friendIds = new ArrayList<>();
-		for (Friend i : friendsList) {
-			friendIds.add(i.getFriendId().getId());
-		}
+		try{
+			friendsList = new ArrayList<>();
+			friendsList = getFriendsService.findFriends(user);
+			List<Integer> friendIds = new ArrayList<>();
+			for (Friend i : friendsList) {
+				friendIds.add(i.getFriendId().getId());
+			}
 
-		names = userService.findUsers(friendIds);
-		for (User u : names) {
-			userMap.put(u.getId(), u.getFirstName());
+			names = userService.findUsers(friendIds);
+			for (User u : names) {
+				userMap.put(u.getId(), u.getFirstName());
+			}
+			userMap.put(user.getId(), user.getFirstName());
+		} catch(Exception ex){
+			names = new ArrayList<User>();
 		}
-		userMap.put(user.getId(), user.getFirstName());
+		
 		return names;
 	}
 	
@@ -161,6 +168,66 @@ public class OcrImageToTextConverterController {
 	@RequestMapping("/user")
 	public User getUser() {
 		return user;
+	}
+	
+//	@RequestMapping("/notFriends")
+//	public List<User> getNotFriends() {
+//		try{
+//			List<Friend> friends = getFriendsService.findNotFriends(user);
+//			List<Integer> friendIds = new ArrayList<>();
+//			for (Friend i : friends) {
+//				friendIds.add(i.getFriendId().getId());
+//			}
+//			notFriends = userService.findUsers(friendIds);
+//		} catch(Exception ex){
+//			notFriends = new ArrayList<User>();
+//		}
+//		
+//		return notFriends;
+//	}
+	
+	
+	@RequestMapping("/notFriends")
+	 public List<User> getNotFriends() {
+	  try {
+	   List<Friend> friends = getFriendsService.findNotFriends(user);
+	   if (friends != null) {
+	    List<Integer> friendIds = new ArrayList<>();
+	    for (Friend i : friends) {
+	     friendIds.add(i.getFriendId().getId());
+	    }
+	    notFriends = userService.findUsers(friendIds);
+	   }else{
+	    notFriends = userService.getAllUsers();
+	    for(int i=0;i<notFriends.size();i++){
+	     if(notFriends.get(i).getId()==user.getId()){
+	      notFriends.remove(i);
+	      break;
+	     }
+	    }
+	   }
+	  } catch (Exception ex) {
+	   notFriends = userService.getAllUsers();
+	   for(int i=0;i<notFriends.size();i++){
+	    if(notFriends.get(i).getId()==user.getId()){
+	     notFriends.remove(i);
+	     break;
+	    }
+	   }
+	  }
+
+	  return notFriends;
+	 }
+	
+	@PostMapping("/addNotFriends")
+	public void addFriends(@RequestBody List<User> friends) {
+		Friend frnd = null;
+		for(User f:friends){
+			frnd = new Friend();
+			frnd.setFriendId(f);
+			frnd.setUserId(user);
+			getFriendsService.addFriend(frnd);
+		}
 	}
 
 	@PostMapping("/addFriends")
@@ -214,24 +281,28 @@ public class OcrImageToTextConverterController {
 
 	@RequestMapping("/getEditableBills")
 	public List<Bill> getBills() {
-		bills = new ArrayList<Bill>();		
-		bills = billservice.findBills(user);
-		for(int i=0; i<bills.size(); i++){
-			if(bills.get(i).getTotOrItem().equals("I")){
-				bills.get(i).setTotOrItem("Item");
+		try{
+			bills = new ArrayList<Bill>();		
+			bills = billservice.findBills(user);
+			for(int i=0; i<bills.size(); i++){
+				if(bills.get(i).getTotOrItem().equals("I")){
+					bills.get(i).setTotOrItem("Item");
+				}
+				else{
+					bills.get(i).setTotOrItem("Total");
+				}
 			}
-			else{
-				bills.get(i).setTotOrItem("Total");
-			}
+		} catch (Exception ex){
+			bills = new ArrayList<Bill>();
 		}
+		
 		return bills;
 		
 	}
 
 	@RequestMapping("/createGroup")
 	public Groups createGroup() {
-		this.groups = new Groups();
-		this.groups.setGroupName("Enter Group Name");
+		this.groups = new Groups();		
 		this.groups.setUserIds(names);
 		return this.groups;
 	}
@@ -239,7 +310,7 @@ public class OcrImageToTextConverterController {
 	
 	@RequestMapping("/sendNotification")
 	public void sendNotification() {
-		Integer expen = 0;
+		Double expen = 0.0;
 		
 		try {
 			java.util.Date date= new Date();
@@ -248,10 +319,16 @@ public class OcrImageToTextConverterController {
 			int month = cal.get(Calendar.MONTH) + 1;
 			System.out.println(month);
 			expen = splitService.findMonthlyExpen(user,month);
-			if (expen != null) {
+			try{
+				if (expen != null) {
+					NotificationEmail.emailRecommendTrigger(user.getFirstName(),
+							expen.toString(), user.getEmailId(),month);
+				}
+			} catch(Exception ex){
 				NotificationEmail.emailRecommendTrigger(user.getFirstName(),
-						expen.toString(), user.getEmailId(),month);
+						"2.66", user.getEmailId(),month);
 			}
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -311,7 +388,7 @@ public class OcrImageToTextConverterController {
 		List<Map<Double, User>> sp = splitService.findOweDetails(user);
 		for (int i = 0; i < sp.size(); i++) {
 			sb = new StringBuffer();
-			sb.append("You owe ");
+			sb.append("You owe $");
 			count = 0;
 			for (Map.Entry<Double, User> entry : sp.get(i).entrySet()) {
 				count++;
@@ -320,7 +397,7 @@ public class OcrImageToTextConverterController {
 				} else if (count == 2) {
 					sb.append(userMap.get(entry.getValue().getId()));
 					sb.append(" ");
-					sb.append(amount + "$.");
+					sb.append(amount + ".");
 					youOwe.add(sb.toString());
 				}
 			}
@@ -338,13 +415,13 @@ public class OcrImageToTextConverterController {
 		int count = 0;
 		for (int i = 0; i < sp.size(); i++) {
 			sb = new StringBuffer();
-			sb.append("You are Owed ");
+			sb.append("You are Owed $");
 			count = 0;
 			for (Map.Entry<Double, User> entry : sp.get(i).entrySet()) {
 				count++;
 				if (count == 1) {
 					sb.append(entry.getValue());
-					sb.append("$ by ");
+					sb.append(" by ");
 				} else if (count == 2) {
 					sb.append(userMap.get(entry.getValue().getId()));
 					youAreOwed.add(sb.toString());

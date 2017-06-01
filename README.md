@@ -2,9 +2,7 @@
 • Worked in a team of 3 to implement an application to upload receipts & provide itemized splitting among friends using tesseract OCR. <br />
 • Implemented features to provide summary of monthly expenditure, social login & notification if expenditure exceeded a threshold amount. <br />
 <br/>
-
-<br />
-Link to the demo: <br />
+Link to the demo: https://youtu.be/KfTKHtCTqqI<br />
 Link to the project documents: <br />
 1) Abstract: https://github.com/Poojabafnaprakash/CMPE220-Digitized-bills/files/1043850/CMPE220-Abstract.pdf <br />
 2) Project Design: https://github.com/Poojabafnaprakash/CMPE220-Digitized-bills/files/1043856/ProjectDesign.pdf <br />
